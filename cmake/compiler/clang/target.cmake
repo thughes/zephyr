@@ -119,3 +119,11 @@ if(NOT "${ARCH}" STREQUAL "posix")
   string(REPLACE ";" " " CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}")
 
 endif()
+
+# CrOS changes
+
+message("RTLIB_DIR: ${RTLIB_DIR}")
+set_property(TARGET linker PROPERTY lib_include_dir "-L${RTLIB_DIR}/baremetal")
+
+set(CMAKE_C_COMPILER "${CROSS_COMPILE}clang")
+set(CMAKE_CXX_COMPILER "${CROSS_COMPILE}clang++")

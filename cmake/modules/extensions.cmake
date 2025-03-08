@@ -1113,6 +1113,7 @@ endfunction()
 # caching comes in addition to the caching that CMake does in the
 # build folder's CMakeCache.txt)
 function(zephyr_check_compiler_flag lang option check)
+  message("XXX: zephyr_check_compiler_flag")
   # Check if the option is covered by any hardcoded check before doing
   # an automated test.
   zephyr_check_compiler_flag_hardcoded(${lang} "${option}" _${check} exists)
@@ -1174,7 +1175,9 @@ function(zephyr_check_compiler_flag lang option check)
     set(possibly_translated_option ${option})
   endif()
 
+  message("XXX: check_compiler_flag: ${lang} ${possibly_translated_option}")
   check_compiler_flag(${lang} "${possibly_translated_option}" inner_check)
+  message("XXX: inner_check: ${inner_check}")
 
   set(${check} ${inner_check} PARENT_SCOPE)
 
