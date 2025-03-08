@@ -20,3 +20,12 @@ check_set_linker_property(TARGET linker PROPERTY sort_alignment ${LINKERFLAGPREF
 if(CONFIG_RISCV_GP)
   check_set_linker_property(TARGET linker PROPERTY relax ${LINKERFLAGPREFIX},--relax-gp)
 endif()
+
+# CrOS changes
+
+# ld/linker_flags.cmake includes ${LINKER}/${COMPILER}/linker_flags.cmake but
+# that doesn't exist for lld, so import the path that actually exists.
+include("${ZEPHYR_BASE}/cmake/linker/ld/${COMPILER}/linker_flags.cmake" OPTIONAL)
+
+# Add the -nopie option to the linker flags to match the compilation options
+set_property(TARGET linker PROPERTY no_position_independent "-nopie")
