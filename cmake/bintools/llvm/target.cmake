@@ -39,30 +39,33 @@
 include("${TOOLCHAIN_ROOT}/cmake/bintools/llvm/generic.cmake")
 
 if ("${ARCH}" STREQUAL "arm" OR "${ARCH}" STREQUAL "riscv")
-  set(CMAKE_AR         "${CROSS_COMPILE}ar")
-  set(CMAKE_NM         "${CROSS_COMPILE}nm")
-  set(CMAKE_OBJCOPY    "${CROSS_COMPILE}objcopy")
-  set(CMAKE_OBJDUMP    "${CROSS_COMPILE}objdump")
-  set(CMAKE_RANLIB     "${CROSS_COMPILE}ranlib")
-  set(CMAKE_READELF    "${CROSS_COMPILE}readelf")
+
+  set(bintools_prefix "$ENV{HOME}/chromiumos/chroot/usr/bin/llvm-")
+
+  set(CMAKE_AR         "${bintools_prefix}ar")
+  set(CMAKE_NM         "${bintools_prefix}nm")
+  set(CMAKE_OBJCOPY    "${bintools_prefix}objcopy")
+  set(CMAKE_OBJDUMP    "${bintools_prefix}objdump")
+  set(CMAKE_RANLIB     "${bintools_prefix}ranlib")
+  set(CMAKE_READELF    "${bintools_prefix}readelf")
 
   # CMake is looking for bintools by adding a suffix to compiler binary
   # e.g for AR it would be armv7m-cros-eabi-clang-ar, which doesn't exist.
   # Set bintools locations manually
-  set(CMAKE_C_COMPILER_AR         "${CROSS_COMPILE}ar")
-  set(CMAKE_C_COMPILER_NM         "${CROSS_COMPILE}nm")
-  set(CMAKE_C_COMPILER_OBJCOPY    "${CROSS_COMPILE}objcopy")
-  set(CMAKE_C_COMPILER_OBJDUMP    "${CROSS_COMPILE}objdump")
-  set(CMAKE_C_COMPILER_RANLIB     "${CROSS_COMPILE}ranlib")
-  set(CMAKE_C_COMPILER_READELF    "${CROSS_COMPILE}readelf")
+  set(CMAKE_C_COMPILER_AR         "${bintools_prefix}ar")
+  set(CMAKE_C_COMPILER_NM         "${bintools_prefix}nm")
+  set(CMAKE_C_COMPILER_OBJCOPY    "${bintools_prefix}objcopy")
+  set(CMAKE_C_COMPILER_OBJDUMP    "${bintools_prefix}objdump")
+  set(CMAKE_C_COMPILER_RANLIB     "${bintools_prefix}ranlib")
+  set(CMAKE_C_COMPILER_READELF    "${bintools_prefix}readelf")
 
   # And for C++
-  set(CMAKE_CXX_COMPILER_AR         "${CROSS_COMPILE}ar")
-  set(CMAKE_CXX_COMPILER_NM         "${CROSS_COMPILE}nm")
-  set(CMAKE_CXX_COMPILER_OBJCOPY    "${CROSS_COMPILE}objcopy")
-  set(CMAKE_CXX_COMPILER_OBJDUMP    "${CROSS_COMPILE}objdump")
-  set(CMAKE_CXX_COMPILER_RANLIB     "${CROSS_COMPILE}ranlib")
-  set(CMAKE_CXX_COMPILER_READELF    "${CROSS_COMPILE}readelf")
+  set(CMAKE_CXX_COMPILER_AR         "${bintools_prefix}ar")
+  set(CMAKE_CXX_COMPILER_NM         "${bintools_prefix}nm")
+  set(CMAKE_CXX_COMPILER_OBJCOPY    "${bintools_prefix}objcopy")
+  set(CMAKE_CXX_COMPILER_OBJDUMP    "${bintools_prefix}objdump")
+  set(CMAKE_CXX_COMPILER_RANLIB     "${bintools_prefix}ranlib")
+  set(CMAKE_CXX_COMPILER_READELF    "${bintools_prefix}readelf")
 
 endif()
 
