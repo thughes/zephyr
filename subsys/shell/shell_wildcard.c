@@ -187,5 +187,5 @@ void z_shell_wildcard_finalize(const struct shell *sh)
 	memcpy(sh->ctx->cmd_buff,
 	       sh->ctx->temp_buff,
 	       sh->ctx->cmd_tmp_buff_len);
-	sh->ctx->cmd_buff_len = sh->ctx->cmd_tmp_buff_len;
+	sh->ctx->cmd_buff_len = sh->ctx->cmd_tmp_buff_len - 1;
 }
