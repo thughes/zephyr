@@ -255,7 +255,7 @@ static int cmd_register_sdp_all(const struct shell *sh, size_t argc, char *argv[
 {
 	int err;
 
-	sh = sh;
+	ARG_UNUSED(sh);
 
 	for (size_t i = 0; i < ARRAY_SIZE(spp_rec); i++) {
 		if (!sdp_rec_reg[i]) {
@@ -274,7 +274,7 @@ static int cmd_register_sdp_large(const struct shell *sh, size_t argc, char *arg
 {
 	int err;
 
-	sh = sh;
+	ARG_UNUSED(sh);
 
 	err = bt_sdp_register_service(&spp_rec_large);
 	if (err) {
@@ -287,7 +287,7 @@ static int cmd_register_sdp_large_valid(const struct shell *sh, size_t argc, cha
 {
 	int err;
 
-	sh = sh;
+	ARG_UNUSED(sh);
 
 	err = bt_sdp_register_service(&spp_rec_large_valid);
 	if (err) {
@@ -365,7 +365,7 @@ static int cmd_register_sdp_uuid128(const struct shell *sh, size_t argc, char *a
 {
 	int err;
 
-	sh = sh;
+	ARG_UNUSED(sh);
 
 	err = bt_sdp_register_service(&spp_rec_uuid128);
 	if (err) {
