@@ -650,10 +650,14 @@ static int rndis_set_handle(uint8_t *data, uint32_t len)
 	}
 
 	/* Parameter starts at offset buf_offset of the req_id field ;) */
+	if (sys_le32_to_cpu(cmd->buf_offset) > len - offsetof(struct rndis_set_cmd, req_id)) {
+		LOG_ERR("Packet parsing error");
+		return -EINVAL;
+	}
+
 	param = (uint8_t *)&cmd->req_id + sys_le32_to_cpu(cmd->buf_offset);
 
-	if (len - ((uintptr_t)param - (uintptr_t)cmd) !=
-	    sys_le32_to_cpu(cmd->buf_len)) {
+	if (sys_le32_to_cpu(cmd->buf_len) > len - (param - (uint8_t *)cmd)) {
 		LOG_ERR("Packet parsing error");
 		return -EINVAL;
 	}
