@@ -159,6 +159,11 @@ static void eem_read_cb(uint8_t ep, int size, void *priv)
 			break;
 		}
 
+		if (eem_size < sizeof(sentinel)) {
+			LOG_ERR("frame too small");
+			break;
+		}
+
 		size -= sizeof(uint16_t);
 		ptr += sizeof(uint16_t);
 
