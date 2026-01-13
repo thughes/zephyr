@@ -9,7 +9,11 @@
 #include <zephyr/net/lwm2m.h>
 #include <zephyr/sys_clock.h>
 
+#if defined(CONFIG_LWM2M_SWMGMT_PACKAGE_URI_LEN)
 #define LWM2M_PACKAGE_URI_LEN CONFIG_LWM2M_SWMGMT_PACKAGE_URI_LEN
+#else
+#define LWM2M_PACKAGE_URI_LEN 255
+#endif
 
 struct requesting_object {
 	uint8_t obj_inst_id;
