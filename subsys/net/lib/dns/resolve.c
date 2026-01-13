@@ -1187,6 +1187,12 @@ static int dns_validate_record(struct dns_resolve_context *ctx, struct dns_msg_t
 		info->ai_family = NET_AF_UNSPEC;
 		info->ai_extension = DNS_RESOLVE_TXT;
 		info->ai_txt.textlen = MIN(dns_msg->response_length, DNS_MAX_TEXT_SIZE);
+
+		if (dns_msg->response_position + info->ai_txt.textlen > dns_msg->msg_size) {
+			errno = EMSGSIZE;
+			return DNS_EAI_SYSTEM;
+		}
+
 		memcpy(info->ai_txt.text, pos, info->ai_txt.textlen);
 		info->ai_txt.text[info->ai_txt.textlen] = '\0';
 		break;
@@ -1200,6 +1206,11 @@ static int dns_validate_record(struct dns_resolve_context *ctx, struct dns_msg_t
 		address_size = MIN(dns_msg->response_length, 6 + DNS_MAX_NAME_SIZE);
 		if (address_size < 6) {
 			/* 3 tuples of be16 - priority, weight, port */
+			errno = EMSGSIZE;
+			return DNS_EAI_SYSTEM;
+		}
+
+		if (dns_msg->response_position + 6 > dns_msg->msg_size) {
 			errno = EMSGSIZE;
 			return DNS_EAI_SYSTEM;
 		}
