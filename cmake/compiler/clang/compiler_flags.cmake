@@ -86,7 +86,7 @@ check_set_compiler_property(PROPERTY warning_extended
                             #FIXME: need to fix all of those
                             -Wno-self-assign
                             -Wno-initializer-overrides
-                            -Wno-section
+                            -Wno-null-character
                             -Wno-gnu
 )
 
