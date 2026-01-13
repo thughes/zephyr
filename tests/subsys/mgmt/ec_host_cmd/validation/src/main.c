@@ -26,6 +26,11 @@ struct ec_response_add {
 	uint32_t out_data;
 } __packed;
 
+/*
+ * We need a buffer that is safe to use even if the configured RX size is small,
+ * for the purpose of the test setup, but we must be careful when passing it to
+ * the simulator backend.
+ */
 static uint8_t host_to_dut_buffer[256];
 struct rx_structure {
 	struct ec_host_cmd_request_header header;
@@ -57,26 +62,52 @@ ec_host_cmd_add(struct ec_host_cmd_handler_args *args)
 EC_HOST_CMD_HANDLER(EC_CMD_HELLO, ec_host_cmd_add, BIT(0),
 		    struct ec_params_add, struct ec_response_add);
 
-ZTEST(ec_host_cmd, test_small_buffer_no_crash)
+ZTEST(ec_host_cmd, test_init_failed_invalid_buffer_size)
 {
 	/*
-	 * This test verifies that if the TX buffer is too small (4 bytes),
-	 * the EC Host Command subsystem fails to initialize and does not crash
-	 * when data is received.
+	 * This test verifies that if the TX or RX buffer is too small (e.g. 4 bytes),
+	 * the EC Host Command subsystem fails to initialize.
 	 */
+
+	const struct ec_host_cmd *hc = ec_host_cmd_get_hc();
+
+	printk("DEBUG: hc->state = %d\n", hc->state);
+	zassert_equal(hc->state, EC_HOST_CMD_STATE_DISABLED,
+		      "EC Host Command state should be DISABLED (%d) but is %d",
+		      EC_HOST_CMD_STATE_DISABLED, hc->state);
+
+	/*
+	 * Attempt to send data to verify no crash/processing occurs.
+	 *
+	 * Note: We must be careful not to crash the simulator backend itself if
+	 * CONFIG_EC_HOST_CMD_HANDLER_RX_BUFFER_SIZE is small (e.g. 4).
+	 * The simulator backend blindly memcpys 'len' bytes to the RX buffer.
+	 * If we are in the 'small_rx' test case, the RX buffer is 4 bytes.
+	 */
+
+	size_t data_len = sizeof(host_to_dut_buffer);
+
+#if CONFIG_EC_HOST_CMD_HANDLER_RX_BUFFER_SIZE < 8
+	/*
+	 * In the small RX buffer case, we can only safely send what fits in the buffer
+	 * to avoid crashing the simulator.
+	 */
+	data_len = CONFIG_EC_HOST_CMD_HANDLER_RX_BUFFER_SIZE;
+#endif
 
 	host_to_dut->header.prtcl_ver = 3;
 	host_to_dut->header.cmd_id = EC_CMD_HELLO;
 	host_to_dut->header.cmd_ver = 0;
 	host_to_dut->header.reserved = 0;
+	/* If data_len is small, this might be truncated, but that's fine,
+	   we just want to ensure the handler doesn't run/crash */
 	host_to_dut->header.data_len = sizeof(host_to_dut->add);
 	host_to_dut->add.in_data = 0x10203040;
 
 	update_host_to_dut_checksum();
 
 	/* Simulate receiving data */
-	int rv = ec_host_cmd_backend_sim_data_received(host_to_dut_buffer,
-						  sizeof(host_to_dut_buffer));
+	int rv = ec_host_cmd_backend_sim_data_received(host_to_dut_buffer, data_len);
 	zassert_equal(rv, 0, "Could not send data %d", rv);
 
 	/* Ensure send was NOT called (timeout expected as init failed) */
