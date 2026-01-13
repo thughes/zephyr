@@ -33,6 +33,9 @@ BUILD_ASSERT(NUMBER_OF_CHOSEN_BACKENDS < 2, "Number of chosen backends > 1");
 #define RX_HEADER_SIZE (sizeof(struct ec_host_cmd_request_header))
 #define TX_HEADER_SIZE (sizeof(struct ec_host_cmd_response_header))
 
+BUILD_ASSERT(TX_HEADER_SIZE == 8);
+BUILD_ASSERT(RX_HEADER_SIZE == 8);
+
 #ifdef CONFIG_EC_HOST_CMD_NOCACHE_BUFFERS
 #define BUFFERS_CACHE_ATTR __nocache
 #else
@@ -502,6 +505,16 @@ int ec_host_cmd_init(struct ec_host_cmd_backend *backend)
 	if (!backend_tx_buf || !backend_rx_buf) {
 		LOG_ERR("No buffer for Host Command communication");
 		return -EIO;
+	}
+
+	if (hc->tx.len_max < TX_HEADER_SIZE) {
+		LOG_ERR("TX buffer too small: %d < %zu", hc->tx.len_max, TX_HEADER_SIZE);
+		return -EINVAL;
+	}
+
+	if (hc->rx_ctx.len_max < RX_HEADER_SIZE) {
+		LOG_ERR("RX buffer too small: %d < %zu", hc->rx_ctx.len_max, RX_HEADER_SIZE);
+		return -EINVAL;
 	}
 
 	hc->state = EC_HOST_CMD_STATE_RECEIVING;
