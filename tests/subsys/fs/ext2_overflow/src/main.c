@@ -7,6 +7,7 @@
 #include <zephyr/ztest.h>
 #include <zephyr/fs/ext2.h>
 #include <zephyr/fs/fs.h>
+#include <string.h>
 
 #define TEST_FS_MNTP "/RAM:"
 
@@ -25,9 +26,15 @@ static void test_ext2_format_overflow(void)
 
 	/* Set volume name to max length without null terminator */
 	/* cfg.volume_name is 17 bytes */
+	/* We fill it completely with 'A's. */
+	/* When strcpy is called in ext2_format, it will read 17 bytes,
+	   and look for null terminator. Since there is none in volume_name,
+	   it will read past volume_name.
+	   If it finds a null later, it will copy > 17 bytes to sb->s_volume_name (16 bytes).
+	   This is buffer overflow.
+	   Also read overflow on cfg.volume_name.
+	 */
 	memset(cfg.volume_name, 'A', 17);
-
-	/* This should cause strcpy to over-read cfg.volume_name and overwrite sb->s_volume_name */
 
 	fs_mnt.type = FS_EXT2;
 	fs_mnt.flags = FS_MOUNT_FLAG_USE_DISK_ACCESS;
@@ -38,7 +45,6 @@ static void test_ext2_format_overflow(void)
 	/* This calls ext2_format -> ext2_format */
 	ret = fs_mkfs(FS_EXT2, (uintptr_t)&fs_mnt, &cfg, 0);
 
-	/* If we didn't crash/ASAN fail, we passed (but expecting fail before fix) */
 	zassert_equal(ret, 0, "mkfs failed");
 }
 
