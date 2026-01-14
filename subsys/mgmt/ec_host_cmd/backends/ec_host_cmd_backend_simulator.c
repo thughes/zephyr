@@ -68,6 +68,10 @@ int ec_host_cmd_backend_sim_data_received(const uint8_t *buffer, size_t len)
 {
 	struct ec_host_cmd_sim_ctx *hc_sim = (struct ec_host_cmd_sim_ctx *)ec_host_cmd_sim.ctx;
 
+	if (len > hc_sim->rx_ctx->len_max) {
+		return -ENOMEM;
+	}
+
 	memcpy(hc_sim->rx_ctx->buf, buffer, len);
 	hc_sim->rx_ctx->len = len;
 

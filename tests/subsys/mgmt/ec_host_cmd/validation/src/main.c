@@ -78,22 +78,8 @@ ZTEST(ec_host_cmd, test_init_failed_invalid_buffer_size)
 
 	/*
 	 * Attempt to send data to verify no crash/processing occurs.
-	 *
-	 * Note: We must be careful not to crash the simulator backend itself if
-	 * CONFIG_EC_HOST_CMD_HANDLER_RX_BUFFER_SIZE is small (e.g. 4).
-	 * The simulator backend blindly memcpys 'len' bytes to the RX buffer.
-	 * If we are in the 'small_rx' test case, the RX buffer is 4 bytes.
 	 */
-
 	size_t data_len = sizeof(host_to_dut_buffer);
-
-#if CONFIG_EC_HOST_CMD_HANDLER_RX_BUFFER_SIZE < 8
-	/*
-	 * In the small RX buffer case, we can only safely send what fits in the buffer
-	 * to avoid crashing the simulator.
-	 */
-	data_len = CONFIG_EC_HOST_CMD_HANDLER_RX_BUFFER_SIZE;
-#endif
 
 	host_to_dut->header.prtcl_ver = 3;
 	host_to_dut->header.cmd_id = EC_CMD_HELLO;
@@ -108,7 +94,11 @@ ZTEST(ec_host_cmd, test_init_failed_invalid_buffer_size)
 
 	/* Simulate receiving data */
 	int rv = ec_host_cmd_backend_sim_data_received(host_to_dut_buffer, data_len);
-	zassert_equal(rv, 0, "Could not send data %d", rv);
+	if (data_len > CONFIG_EC_HOST_CMD_HANDLER_RX_BUFFER_SIZE) {
+		zassert_equal(rv, -ENOMEM, "Should have failed with -ENOMEM, got %d", rv);
+	} else {
+		zassert_equal(rv, 0, "Could not send data %d", rv);
+	}
 
 	/* Ensure send was NOT called (timeout expected as init failed) */
 	rv = k_sem_take(&send_called, K_MSEC(100));
