@@ -1107,23 +1107,19 @@ int z_vrfy_k_thread_stack_space_get(const struct k_thread *thread,
 #include <zephyr/syscalls/k_thread_stack_space_get_mrsh.c>
 #endif /* CONFIG_USERSPACE */
 
-void log_stack_usage(const struct k_thread *thread)
+void z_log_stack_usage(const struct k_thread *thread, size_t unused, size_t size)
 {
-	size_t unused, size = thread->stack_info.size;
+	unsigned int pcnt = ((size - unused) * 100U) / size;
+	const char *tname;
 
-	if (k_thread_stack_space_get(thread, &unused) == 0) {
-		unsigned int pcnt = ((size - unused) * 100U) / size;
-		const char *tname;
-
-		tname = k_thread_name_get((k_tid_t)thread);
-		if (tname == NULL) {
-			tname = "unknown";
-		}
-
-		LOG_INF("%p (%s):\tunused %zu\tusage %zu / %zu (%u %%)",
-			thread, tname, unused, size - unused, size,
-			pcnt);
+	tname = k_thread_name_get((k_tid_t)thread);
+	if (tname == NULL) {
+		tname = "unknown";
 	}
+
+	LOG_INF("%p (%s):\tunused %zu\tusage %zu / %zu (%u %%)",
+		thread, tname, unused, size - unused, size,
+		pcnt);
 }
 #endif /* CONFIG_INIT_STACKS && CONFIG_THREAD_STACK_INFO */
 
