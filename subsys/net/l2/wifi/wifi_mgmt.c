@@ -1553,12 +1553,14 @@ BUILD_ASSERT(sizeof(CONFIG_WIFI_CREDENTIALS_STATIC_SSID) != 1,
 	     "CONFIG_WIFI_CREDENTIALS_STATIC_SSID required");
 #endif /* defined(CONFIG_WIFI_CREDENTIALS_STATIC) */
 
-/**
- * Disable -Wcast-qual in this function, the buffers passed in the params argument are mutable.
- */
-TOOLCHAIN_DISABLE_WARNING(TOOLCHAIN_WARNING_CAST_QUAL)
 static int __stored_creds_to_params(struct wifi_credentials_personal *creds,
-				    struct wifi_connect_req_params *params)
+				    struct wifi_connect_req_params *params,
+				    uint8_t *ssid_buf,
+				    uint8_t *psk_buf
+#ifdef CONFIG_WIFI_NM_WPA_SUPPLICANT_CRYPTO_ENTERPRISE
+				    , uint8_t *key_passwd_buf
+#endif /* CONFIG_WIFI_NM_WPA_SUPPLICANT_CRYPTO_ENTERPRISE */
+				    )
 {
 	/* SSID */
 	if (creds->header.ssid_len > WIFI_SSID_MAX_LEN) {
@@ -1566,12 +1568,12 @@ static int __stored_creds_to_params(struct wifi_credentials_personal *creds,
 		return -EINVAL;
 	}
 
-	memcpy((uint8_t *)params->ssid, creds->header.ssid, creds->header.ssid_len);
+	memcpy(ssid_buf, creds->header.ssid, creds->header.ssid_len);
 	params->ssid_length = creds->header.ssid_len;
 
 	/* PSK (optional) */
 	if (creds->password_len > 0 && creds->password_len <= WIFI_PSK_MAX_LEN) {
-		memcpy((uint8_t *)params->psk, creds->password, creds->password_len);
+		memcpy(psk_buf, creds->password, creds->password_len);
 		params->psk_length = creds->password_len;
 	}
 
@@ -1585,7 +1587,7 @@ static int __stored_creds_to_params(struct wifi_credentials_personal *creds,
 				LOG_ERR("key_passwd string truncated");
 				return -EINVAL;
 			}
-			memcpy((uint8_t *)params->key_passwd, creds->header.key_passwd,
+			memcpy(key_passwd_buf, creds->header.key_passwd,
 			       creds->header.key_passwd_length);
 			params->key_passwd_length = creds->header.key_passwd_length;
 		}
@@ -1622,24 +1624,6 @@ static int __stored_creds_to_params(struct wifi_credentials_personal *creds,
 
 	return 0;
 }
-TOOLCHAIN_ENABLE_WARNING(TOOLCHAIN_WARNING_CAST_QUAL)
-
-static inline const char *wpa_supp_security_txt(enum wifi_security_type security)
-{
-	switch (security) {
-	case WIFI_SECURITY_TYPE_NONE:
-		return "NONE";
-	case WIFI_SECURITY_TYPE_PSK:
-		return "WPA-PSK";
-	case WIFI_SECURITY_TYPE_PSK_SHA256:
-		return "WPA-PSK-SHA256";
-	case WIFI_SECURITY_TYPE_SAE:
-		return "SAE";
-	case WIFI_SECURITY_TYPE_UNKNOWN:
-	default:
-		return "UNKNOWN";
-	}
-}
 
 static int add_network_from_credentials_struct_personal(struct wifi_credentials_personal *creds,
 							struct net_if *iface)
@@ -1659,7 +1643,11 @@ static int add_network_from_credentials_struct_personal(struct wifi_credentials_
 #endif /* CONFIG_WIFI_NM_WPA_SUPPLICANT_CRYPTO_ENTERPRISE */
 	};
 
-	if (__stored_creds_to_params(creds, &cnx_params) != 0) {
+	if (__stored_creds_to_params(creds, &cnx_params, ssid, psk
+#ifdef CONFIG_WIFI_NM_WPA_SUPPLICANT_CRYPTO_ENTERPRISE
+				     , key_passwd
+#endif /* CONFIG_WIFI_NM_WPA_SUPPLICANT_CRYPTO_ENTERPRISE */
+				     ) != 0) {
 		ret = -ENOEXEC;
 		goto out;
 	}
