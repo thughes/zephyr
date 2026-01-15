@@ -369,42 +369,13 @@ int k_usermode_string_copy(char *dst, const char *src, size_t maxlen);
  * @note This is an internal API. Do not use unless you are extending
  *       functionality in the Zephyr tree.
  */
+void z_syscall_verify_err(const char *fmt, ...);
+
 #define K_SYSCALL_VERIFY_MSG(expr, fmt, ...) ({ \
 	bool expr_copy = !(expr); \
 	if (expr_copy) { \
-		extern const struct log_source_const_data Z_LOG_ITEM_CONST_DATA(os); \
-		extern struct log_source_dynamic_data LOG_ITEM_DYNAMIC_DATA(os); \
-		const void *__log_source_os = (const void *)COND_CODE_1( \
-			CONFIG_LOG_RUNTIME_FILTERING, \
-			(&LOG_ITEM_DYNAMIC_DATA(os)), \
-			(&Z_LOG_ITEM_CONST_DATA(os))); \
-		if (IS_ENABLED(CONFIG_LOG) && \
-		    (LOG_LEVEL_ERR <= _LOG_LEVEL_RESOLVE(os, CONFIG_KERNEL_LOG_LEVEL)) && \
-		    (LOG_LEVEL_ERR <= CONFIG_LOG_MAX_LEVEL)) { \
-			if (IS_ENABLED(CONFIG_LOG_MODE_MINIMAL)) { \
-				Z_LOG_TO_PRINTK(LOG_LEVEL_ERR, \
-					"syscall %s failed check: " fmt, \
-					__func__, ##__VA_ARGS__); \
-			} else { \
-				int _mode; \
-				bool string_ok; \
-				LOG_POINTERS_VALIDATE(string_ok, \
-					"syscall %s failed check: " fmt, \
-					__func__, ##__VA_ARGS__); \
-				if (!string_ok) { \
-					LOG_STRING_WARNING(_mode, __log_source_os, \
-						"syscall %s failed check: " fmt, \
-						__func__, ##__VA_ARGS__); \
-				} else { \
-					Z_LOG_MSG_CREATE( \
-						UTIL_NOT(IS_ENABLED(CONFIG_USERSPACE)), \
-						_mode, Z_LOG_LOCAL_DOMAIN_ID, \
-						__log_source_os, LOG_LEVEL_ERR, NULL, \
-						0, "syscall %s failed check: " fmt, \
-						__func__, ##__VA_ARGS__); \
-				} \
-			} \
-		} \
+		z_syscall_verify_err("syscall %s failed check: " fmt, \
+				     __func__, ##__VA_ARGS__); \
 	} \
 	expr_copy; })
 
