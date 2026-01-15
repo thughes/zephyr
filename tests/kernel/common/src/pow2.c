@@ -6,6 +6,7 @@
 
 #include <zephyr/ztest.h>
 #include <zephyr/kernel.h>
+#include <zephyr/toolchain.h>
 
 /**
  * @brief Test the Z_POW2_CEIL() macro
@@ -26,6 +27,11 @@
  * @details Check if static array allocations are sized as expected.
  */
 
+/* Clang may complain about VLA folding to constant array when -Wgnu-folding-constant is enabled.
+ * Since we are testing a macro that might use extensions, we suppress it here.
+ */
+TOOLCHAIN_DISABLE_CLANG_WARNING("-Wgnu-folding-constant")
+
 char static_array1[Z_POW2_CEIL(1)];
 char static_array2[Z_POW2_CEIL(2)];
 char static_array3[Z_POW2_CEIL(3)];
@@ -43,6 +49,8 @@ BUILD_ASSERT(sizeof(static_array5) == 8);
 BUILD_ASSERT(sizeof(static_array7) == 8);
 BUILD_ASSERT(sizeof(static_array8) == 8);
 BUILD_ASSERT(sizeof(static_array9) == 16);
+
+TOOLCHAIN_ENABLE_CLANG_WARNING("-Wgnu-folding-constant")
 
 /**
  * @brief Verify run-time non-constant results

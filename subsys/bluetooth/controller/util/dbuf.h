@@ -18,7 +18,6 @@ struct dbuf_hdr {
 	/* Size in a bytes of a single element stored in double buffer. */
 	uint8_t elem_size;
 	/* Pointer for actual buffer memory. Its size should be 2 times @p elem_size. */
-	uint8_t data[];
 };
 
 /**
@@ -47,7 +46,9 @@ void *dbuf_alloc(struct dbuf_hdr *hdr, uint8_t *idx);
  */
 static inline void *dbuf_peek(struct dbuf_hdr *hdr)
 {
-	return &hdr->data[hdr->last * hdr->elem_size];
+	uint8_t *data = (uint8_t *)(hdr + 1);
+
+	return &data[hdr->last * hdr->elem_size];
 }
 
 /**
@@ -91,7 +92,9 @@ void *dbuf_latest_get(struct dbuf_hdr *hdr, uint8_t *is_modified);
  */
 static inline void *dbuf_curr_get(struct dbuf_hdr *hdr)
 {
-	return &hdr->data[hdr->first * hdr->elem_size];
+	uint8_t *data = (uint8_t *)(hdr + 1);
+
+	return &data[hdr->first * hdr->elem_size];
 }
 
 /**

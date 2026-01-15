@@ -289,7 +289,7 @@ static void icm45686_event_handler(const struct device *dev)
 					 cfg->settings.fifo_watermark;
 
 		err = icm45686_prep_reg_read_rtio_async(
-			&data->bus, REG_FIFO_DATA | REG_READ_BIT, (uint8_t *)&buf->fifo_payload,
+			&data->bus, REG_FIFO_DATA | REG_READ_BIT, (uint8_t *)&buf->payload,
 			buf->header.fifo_count * sizeof(struct icm45686_encoded_fifo_payload),
 			&data_rd_sqe);
 		if (err < 0) {

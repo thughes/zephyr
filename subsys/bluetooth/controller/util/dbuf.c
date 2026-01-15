@@ -55,7 +55,7 @@ void *dbuf_alloc(struct dbuf_hdr *hdr, uint8_t *idx)
 
 	*idx = last;
 
-	return &hdr->data[last * hdr->elem_size];
+	return &((uint8_t *)(hdr + 1))[last * hdr->elem_size];
 }
 
 void *dbuf_latest_get(struct dbuf_hdr *hdr, uint8_t *is_modified)
@@ -79,5 +79,5 @@ void *dbuf_latest_get(struct dbuf_hdr *hdr, uint8_t *is_modified)
 		}
 	}
 
-	return &hdr->data[first * hdr->elem_size];
+	return &((uint8_t *)(hdr + 1))[first * hdr->elem_size];
 }
