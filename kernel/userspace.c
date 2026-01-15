@@ -1037,23 +1037,3 @@ static uintptr_t handler_no_syscall(uintptr_t arg1, uintptr_t arg2,
 }
 
 #include <zephyr/syscall_dispatch.c>
-
-void z_syscall_verify_err(const char *fmt, ...)
-{
-	va_list ap;
-
-	va_start(ap, fmt);
-#ifdef CONFIG_LOG
-	if (Z_LOG_LEVEL_ALL_CHECK(LOG_LEVEL_ERR, 0, Z_LOG_CURRENT_DATA())) {
-		if (IS_ENABLED(CONFIG_LOG_MODE_MINIMAL)) {
-			Z_LOG_TO_VPRINTK(LOG_LEVEL_ERR, fmt, ap);
-		} else {
-			z_log_msg_runtime_vcreate(Z_LOG_LOCAL_DOMAIN_ID,
-						  Z_LOG_CURRENT_DATA(),
-						  LOG_LEVEL_ERR, NULL, 0, 0,
-						  fmt, ap);
-		}
-	}
-#endif
-	va_end(ap);
-}
