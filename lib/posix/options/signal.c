@@ -182,11 +182,11 @@ int pause(void)
 	return -1;
 }
 
-int sigaction(int sig, const struct sigaction *ZRESTRICT act, struct sigaction *ZRESTRICT oact)
+int sigaction(int signal, const struct sigaction *ZRESTRICT new_act, struct sigaction *ZRESTRICT old_act)
 {
-	ARG_UNUSED(sig);
-	ARG_UNUSED(act);
-	ARG_UNUSED(oact);
+	ARG_UNUSED(signal);
+	ARG_UNUSED(new_act);
+	ARG_UNUSED(old_act);
 	errno = ENOSYS;
 	return -1;
 }

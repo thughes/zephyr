@@ -240,9 +240,7 @@ int pthread_sigmask(int how, const sigset_t *ZRESTRICT set, sigset_t *ZRESTRICT 
 #endif
 /* raise() must be defined by the libc signal.h */
 #if defined(_POSIX_REALTIME_SIGNALS) || defined(__DOXYGEN__)
-TOOLCHAIN_DISABLE_WARNING(TOOLCHAIN_WARNING_SHADOW);
-int sigaction(int sig, const struct sigaction *ZRESTRICT act, struct sigaction *ZRESTRICT oact);
-TOOLCHAIN_ENABLE_WARNING(TOOLCHAIN_WARNING_SHADOW);
+int sigaction(int signal, const struct sigaction *ZRESTRICT new_act, struct sigaction *ZRESTRICT old_act);
 #endif
 int sigaddset(sigset_t *set, int sig);
 #if defined(_XOPEN_SOURCE) || defined(__DOXYGEN__)
