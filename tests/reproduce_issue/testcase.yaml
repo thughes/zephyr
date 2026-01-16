@@ -1,0 +1,4 @@
+tests:
+  reproduce.issue:
+    tags: ignore_faults
+    platform_allow: native_sim
