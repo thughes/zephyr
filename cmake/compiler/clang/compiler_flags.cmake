@@ -84,11 +84,11 @@ check_set_compiler_property(APPEND PROPERTY warning_dw_3
 
 check_set_compiler_property(PROPERTY warning_extended
                             #FIXME: need to fix all of those
-                            -Wno-self-assign
                             -Wno-initializer-overrides
                             -Wno-section
                             -Wno-gnu
 )
+
 
 set_compiler_property(PROPERTY warning_error_coding_guideline
                       -Werror=vla
