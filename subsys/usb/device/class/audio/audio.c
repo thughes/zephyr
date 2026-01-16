@@ -162,9 +162,11 @@ static struct usb_ep_cfg_data dev##_usb_audio_ep_data_##i[] = {		  \
 		  .in_frame_size = __in_pool_size,			\
 		  .controls = {dev##_controls_##i, NULL},		\
 		  .ch_cnt = {(CH_CNT(dev, i) + 1), 0},			\
-		  .volumes.volume_max = GET_VOLUME(dev, i, volume_max), \
-		  .volumes.volume_min = GET_VOLUME(dev, i, volume_min), \
-		  .volumes.volume_res = GET_VOLUME(dev, i, volume_res), \
+		  .volumes = {						\
+			.volume_max = GET_VOLUME(dev, i, volume_max),	\
+			.volume_min = GET_VOLUME(dev, i, volume_min),	\
+			.volume_res = GET_VOLUME(dev, i, volume_res),	\
+		  },							\
 		}
 
 #define DEFINE_AUDIO_DEV_DATA_BIDIR(dev, i, __out_pool, __in_pool_size)	   \
@@ -176,9 +178,11 @@ static struct usb_ep_cfg_data dev##_usb_audio_ep_data_##i[] = {		  \
 		  .controls = {dev##_controls0_##i, dev##_controls1_##i},  \
 		  .ch_cnt = {(CH_CNT(dev##_MIC, i) + 1),		   \
 			     (CH_CNT(dev##_HP, i) + 1)},		   \
-		  .volumes.volume_max = GET_VOLUME(dev, i, volume_max),	   \
-		  .volumes.volume_min = GET_VOLUME(dev, i, volume_min),	   \
-		  .volumes.volume_res = GET_VOLUME(dev, i, volume_res),	   \
+		  .volumes = {						\
+			.volume_max = GET_VOLUME(dev, i, volume_max),	\
+			.volume_min = GET_VOLUME(dev, i, volume_min),	\
+			.volume_res = GET_VOLUME(dev, i, volume_res),	\
+		  },							\
 		}
 
 /**
