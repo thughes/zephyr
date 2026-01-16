@@ -101,3 +101,5 @@ static inline int z_vrfy_fuel_gauge_battery_cutoff(const struct device *dev)
 }
 
 #include <zephyr/syscalls/fuel_gauge_battery_cutoff_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

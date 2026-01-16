@@ -48,6 +48,8 @@ static inline int z_vrfy_validation_overhead_syscall(void)
 	return status_0 || status_1;
 }
 #include <zephyr/syscalls/validation_overhead_syscall_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 
 
 void test_drop_to_user_mode_1(void *p1, void *p2, void *p3)

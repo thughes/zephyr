@@ -401,6 +401,8 @@ uint32_t z_vrfy_k_event_wait_all_safe(struct k_event *event, uint32_t events,
 	return z_impl_k_event_wait_all_safe(event, events, reset, timeout);
 }
 #include <zephyr/syscalls/k_event_wait_all_safe_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 #endif /* CONFIG_USERSPACE */
 
 #ifdef CONFIG_OBJ_CORE_EVENT

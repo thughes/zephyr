@@ -124,3 +124,5 @@ static inline int z_vrfy_spi_release(const struct device *dev,
 	return z_impl_spi_release((const struct device *)dev, config);
 }
 #include <zephyr/syscalls/spi_release_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

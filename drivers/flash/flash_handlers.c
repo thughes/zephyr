@@ -148,5 +148,7 @@ static inline int z_vrfy_flash_ex_op(const struct device *dev, uint16_t code,
 	return z_impl_flash_ex_op(dev, code, in, out);
 }
 #include <zephyr/syscalls/flash_ex_op_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 
 #endif /* CONFIG_FLASH_EX_OP_ENABLED */

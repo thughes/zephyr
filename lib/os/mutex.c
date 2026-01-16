@@ -72,3 +72,5 @@ static inline int z_vrfy_z_sys_mutex_kernel_unlock(struct sys_mutex *mutex)
 	return z_impl_z_sys_mutex_kernel_unlock(mutex);
 }
 #include <zephyr/syscalls/z_sys_mutex_kernel_unlock_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

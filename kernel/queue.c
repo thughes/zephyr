@@ -448,6 +448,8 @@ static inline void *z_vrfy_k_queue_peek_tail(struct k_queue *queue)
 	return z_impl_k_queue_peek_tail(queue);
 }
 #include <zephyr/syscalls/k_queue_peek_tail_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 
 #endif /* CONFIG_USERSPACE */
 

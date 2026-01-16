@@ -165,3 +165,5 @@ static inline int z_vrfy_auxdisplay_custom_command(const struct device *dev,
 	return z_impl_auxdisplay_custom_command(dev, data);
 }
 #include <zephyr/syscalls/auxdisplay_custom_command_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

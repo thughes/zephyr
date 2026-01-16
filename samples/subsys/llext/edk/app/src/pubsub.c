@@ -219,4 +219,6 @@ static inline int z_vrfy_register_subscriber(enum Channels channel,
 	return z_impl_register_subscriber(channel, evt);
 }
 #include <zephyr/syscalls/register_subscriber_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 #endif

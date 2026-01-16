@@ -44,3 +44,5 @@ static inline int z_vrfy_mbox_set_enabled(const struct device *dev,
 	return z_impl_mbox_set_enabled(dev, channel_id, enabled);
 }
 #include <zephyr/syscalls/mbox_set_enabled_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

@@ -91,3 +91,5 @@ static inline int z_vrfy_i2c_recover_bus(const struct device *dev)
 	return z_impl_i2c_recover_bus(dev);
 }
 #include <zephyr/syscalls/i2c_recover_bus_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

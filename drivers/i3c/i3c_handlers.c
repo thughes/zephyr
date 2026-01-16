@@ -80,3 +80,5 @@ static inline int z_vrfy_i3c_transfer(struct i3c_device_desc *target,
 					  (uint8_t)num_msgs);
 }
 #include <zephyr/syscalls/i3c_transfer_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

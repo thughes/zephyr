@@ -482,6 +482,8 @@ static inline bool z_vrfy_syscall_context(void)
 	return z_impl_syscall_context();
 }
 #include <zephyr/syscalls/syscall_context_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 
 void test_syscall_context_user(void *p1, void *p2, void *p3)
 {

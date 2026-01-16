@@ -331,5 +331,7 @@ static inline uint32_t z_vrfy_can_stats_get_rx_overruns(const struct device *dev
 	return z_impl_can_stats_get_rx_overruns(dev);
 }
 #include <zephyr/syscalls/can_stats_get_rx_overruns_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 
 #endif /* CONFIG_CAN_STATS */

@@ -25,4 +25,6 @@ static inline int z_vrfy_zsock_gethostname(char *buf, size_t len)
 	return z_impl_zsock_gethostname(buf, len);
 }
 #include <zephyr/syscalls/zsock_gethostname_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 #endif

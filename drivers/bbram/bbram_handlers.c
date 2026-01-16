@@ -53,3 +53,5 @@ static inline int z_vrfy_bbram_write(const struct device *dev, size_t offset,
 	return z_impl_bbram_write(dev, offset, size, data);
 }
 #include <zephyr/syscalls/bbram_write_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

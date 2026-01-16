@@ -246,6 +246,8 @@ void z_vrfy_k_mem_paging_histogram_backing_store_page_out_get(
 	z_impl_k_mem_paging_histogram_backing_store_page_out_get(hist);
 }
 #include <zephyr/syscalls/k_mem_paging_histogram_backing_store_page_out_get_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 #endif /* CONFIG_USERSPACE */
 
 #endif /* CONFIG_DEMAND_PAGING_TIMING_HISTOGRAM */

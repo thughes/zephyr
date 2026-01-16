@@ -18,3 +18,5 @@ static inline int z_vrfy_entropy_get_entropy(const struct device *dev,
 					  len);
 }
 #include <zephyr/syscalls/entropy_get_entropy_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

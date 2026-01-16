@@ -210,3 +210,5 @@ static inline int z_vrfy_espi_flash_erase(const struct device *dev,
 	return ret;
 }
 #include <zephyr/syscalls/espi_flash_erase_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

@@ -24,6 +24,8 @@ int cbprintf(cbprintf_cb out, void *ctx, const char *format, ...)
 
 #include <stdio.h>
 #include <zephyr/sys/__assert.h>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 
 /* Context for sn* variants is the next space in the buffer, and the buffer
  * end.

@@ -15,6 +15,8 @@
 #include <zephyr/arch/cfi.h>
 #ifdef CONFIG_CURRENT_THREAD_USE_TLS
 #include <zephyr/random/random.h>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 
 Z_THREAD_LOCAL k_tid_t z_tls_current;
 #endif

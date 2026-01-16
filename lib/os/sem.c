@@ -6,6 +6,8 @@
 
 #include <zephyr/sys/sem.h>
 #include <zephyr/internal/syscall_handler.h>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 
 #ifdef CONFIG_USERSPACE
 #define SYS_SEM_MINIMUM      0

@@ -45,3 +45,5 @@ static inline int z_vrfy_ps2_disable_callback(const struct device *dev)
 	return z_impl_ps2_disable_callback(dev);
 }
 #include <zephyr/syscalls/ps2_disable_callback_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

@@ -30,3 +30,5 @@ static inline int z_vrfy_sys_cache_data_flush_and_invd_range(void *addr, size_t 
 	return z_impl_sys_cache_data_flush_and_invd_range(addr, size);
 }
 #include <zephyr/syscalls/sys_cache_data_flush_and_invd_range_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

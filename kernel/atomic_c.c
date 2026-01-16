@@ -411,4 +411,6 @@ ATOMIC_SYSCALL_HANDLER_TARGET_VALUE(atomic_nand);
 #include <zephyr/syscalls/atomic_xor_mrsh.c>
 #include <zephyr/syscalls/atomic_and_mrsh.c>
 #include <zephyr/syscalls/atomic_nand_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 #endif /* CONFIG_USERSPACE */

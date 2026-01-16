@@ -38,3 +38,5 @@ static inline int z_vrfy_retained_mem_clear(const struct device *dev)
 	return z_impl_retained_mem_clear(dev);
 }
 #include <zephyr/syscalls/retained_mem_clear_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

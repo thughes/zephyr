@@ -38,3 +38,5 @@ static inline int z_vrfy_ipm_set_enabled(const struct device *dev, int enable)
 	return z_impl_ipm_set_enabled((const struct device *)dev, enable);
 }
 #include <zephyr/syscalls/ipm_set_enabled_mrsh.c>
+#include <zephyr/logging/log.h>
+LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
