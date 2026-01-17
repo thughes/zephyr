@@ -600,7 +600,5 @@ const struct flash_simulator_params *z_vrfy_flash_simulator_get_params(const str
 }
 
 #include <zephyr/syscalls/flash_simulator_get_memory_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 
 #endif /* CONFIG_USERSPACE */

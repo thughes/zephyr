@@ -166,7 +166,6 @@ static inline void z_vrfy_k_str_out(char *c, size_t n)
 	z_impl_k_str_out((char *)c, n);
 }
 #include <zephyr/syscalls/k_str_out_mrsh.c>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 #endif /* CONFIG_USERSPACE */
 
 /**

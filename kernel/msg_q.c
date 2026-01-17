@@ -482,8 +482,6 @@ static inline uint32_t z_vrfy_k_msgq_num_used_get(struct k_msgq *msgq)
 	return z_impl_k_msgq_num_used_get(msgq);
 }
 #include <zephyr/syscalls/k_msgq_num_used_get_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 
 #endif /* CONFIG_USERSPACE */
 

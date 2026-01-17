@@ -115,6 +115,4 @@ static inline int z_vrfy_gpio_port_get_direction(const struct device *dev, gpio_
 	return z_impl_gpio_port_get_direction(dev, map, inputs, outputs);
 }
 #include <zephyr/syscalls/gpio_port_get_direction_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 #endif /* CONFIG_GPIO_GET_DIRECTION */

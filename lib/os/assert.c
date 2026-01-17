@@ -8,8 +8,6 @@
 #include <zephyr/sys/printk.h>
 #include <zephyr/kernel.h>
 #include <zephyr/llext/symbol.h>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 
 /**
  * @brief Assert Action Handler

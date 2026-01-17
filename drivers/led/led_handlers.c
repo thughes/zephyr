@@ -75,5 +75,3 @@ static inline int z_vrfy_led_off(const struct device *dev, uint32_t led)
 	return z_impl_led_off((const struct device *)dev, led);
 }
 #include <zephyr/syscalls/led_off_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

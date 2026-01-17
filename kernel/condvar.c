@@ -138,8 +138,6 @@ int z_vrfy_k_condvar_wait(struct k_condvar *condvar, struct k_mutex *mutex,
 	return z_impl_k_condvar_wait(condvar, mutex, timeout);
 }
 #include <zephyr/syscalls/k_condvar_wait_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 #endif /* CONFIG_USERSPACE */
 
 #ifdef CONFIG_OBJ_CORE_CONDVAR

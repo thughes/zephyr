@@ -103,5 +103,3 @@ static inline int z_vrfy_k_futex_wait(struct k_futex *futex, int expected,
 	return z_impl_k_futex_wait(futex, expected, timeout);
 }
 #include <zephyr/syscalls/k_futex_wait_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

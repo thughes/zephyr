@@ -32,5 +32,3 @@ int z_vrfy_sample_driver_write(const struct device *dev, void *buf)
 	return z_impl_sample_driver_write(dev, buf);
 }
 #include <zephyr/syscalls/sample_driver_write_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

@@ -58,8 +58,6 @@ static inline int z_vrfy_check_perms(void *addr, size_t size, int write)
 	return z_impl_check_perms((void *)addr, size, write);
 }
 #include <zephyr/syscalls/check_perms_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 #endif /* CONFIG_USERSPACE */
 
 /* Global data structure with object information, used by

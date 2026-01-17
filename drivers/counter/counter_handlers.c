@@ -156,5 +156,3 @@ static inline int z_vrfy_counter_set_guard_period(const struct device *dev,
 						flags);
 }
 #include <zephyr/syscalls/counter_set_guard_period_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

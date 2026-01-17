@@ -122,5 +122,3 @@ static inline int z_vrfy_i2s_trigger(const struct device *dev,
 	return z_impl_i2s_trigger((const struct device *)dev, dir, cmd);
 }
 #include <zephyr/syscalls/i2s_trigger_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

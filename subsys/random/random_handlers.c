@@ -23,6 +23,4 @@ static inline int z_vrfy_sys_csrand_get(void *dst, size_t len)
 	return z_impl_sys_csrand_get(dst, len);
 }
 #include <zephyr/syscalls/sys_csrand_get_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 #endif

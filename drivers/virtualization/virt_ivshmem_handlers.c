@@ -119,7 +119,5 @@ static inline int z_vrfy_ivshmem_enable_interrupts(const struct device *dev,
 	return z_impl_ivshmem_enable_interrupts(dev, enable);
 }
 #include <zephyr/syscalls/ivshmem_enable_interrupts_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 
 #endif /* CONFIG_IVSHMEM_V2 */

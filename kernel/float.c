@@ -43,7 +43,5 @@ static inline int z_vrfy_k_float_enable(struct k_thread *thread, unsigned int op
 	return z_impl_k_float_enable(thread, options);
 }
 #include <zephyr/syscalls/k_float_enable_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 
 #endif /* CONFIG_USERSPACE */

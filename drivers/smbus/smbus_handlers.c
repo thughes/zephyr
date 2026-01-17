@@ -161,5 +161,3 @@ static inline int z_vrfy_smbus_host_notify_remove_cb(const struct device *dev,
 	return z_impl_smbus_host_notify_remove_cb(dev, cb);
 }
 #include <zephyr/syscalls/smbus_host_notify_remove_cb_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

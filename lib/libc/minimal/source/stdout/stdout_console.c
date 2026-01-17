@@ -105,8 +105,6 @@ static inline size_t z_vrfy_zephyr_fwrite(const void *ZRESTRICT ptr,
 	return z_impl_zephyr_fwrite(ptr, size, nitems, stream);
 }
 #include <zephyr/syscalls/zephyr_fwrite_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 #endif
 
 size_t fwrite(const void *ZRESTRICT ptr, size_t size, size_t nitems,

@@ -76,6 +76,4 @@ static inline int z_vrfy_rtc_get_calibration(const struct device *dev, int32_t *
 	return z_impl_rtc_get_calibration(dev, calibration);
 }
 #include <zephyr/syscalls/rtc_get_calibration_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 #endif /* CONFIG_RTC_CALIBRATION */

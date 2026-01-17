@@ -76,7 +76,5 @@ static inline int z_vrfy_pwm_capture_cycles(const struct device *dev,
 	return err;
 }
 #include <zephyr/syscalls/pwm_capture_cycles_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 
 #endif /* CONFIG_PWM_CAPTURE */

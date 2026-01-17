@@ -154,5 +154,3 @@ static inline void z_vrfy_rtio_pool_release(struct rtio_pool *rpool, struct rtio
 	z_impl_rtio_pool_release(rpool, r);
 }
 #include <zephyr/syscalls/rtio_pool_release_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

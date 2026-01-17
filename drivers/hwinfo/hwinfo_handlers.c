@@ -53,5 +53,3 @@ int z_vrfy_hwinfo_get_supported_reset_cause(uint32_t *supported)
 	return ret;
 }
 #include <zephyr/syscalls/hwinfo_get_supported_reset_cause_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

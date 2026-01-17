@@ -559,8 +559,6 @@ static inline void z_vrfy_k_poll_signal_reset(struct k_poll_signal *sig)
 	z_impl_k_poll_signal_reset(sig);
 }
 #include <zephyr/syscalls/k_poll_signal_reset_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 
 #endif /* CONFIG_USERSPACE */
 

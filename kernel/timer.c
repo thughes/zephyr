@@ -410,8 +410,6 @@ static inline void z_vrfy_k_timer_user_data_set(struct k_timer *timer,
 	z_impl_k_timer_user_data_set(timer, user_data);
 }
 #include <zephyr/syscalls/k_timer_user_data_set_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 
 #endif /* CONFIG_USERSPACE */
 

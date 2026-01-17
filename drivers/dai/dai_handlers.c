@@ -143,5 +143,3 @@ static inline int z_vrfy_dai_config_update(const struct device *dev,
 	return z_impl_dai_config_update(dev, bespoke_cfg_kernel, size);
 }
 #include <zephyr/syscalls/dai_config_update_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

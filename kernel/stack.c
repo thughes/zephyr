@@ -198,8 +198,6 @@ static inline int z_vrfy_k_stack_pop(struct k_stack *stack,
 	return z_impl_k_stack_pop(stack, data, timeout);
 }
 #include <zephyr/syscalls/k_stack_pop_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 #endif /* CONFIG_USERSPACE */
 
 #ifdef CONFIG_OBJ_CORE_STACK

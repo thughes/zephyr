@@ -34,5 +34,3 @@ static inline size_t z_vrfy_eeprom_get_size(const struct device *dev)
 	return z_impl_eeprom_get_size((const struct device *)dev);
 }
 #include <zephyr/syscalls/eeprom_get_size_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

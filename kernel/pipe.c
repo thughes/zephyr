@@ -336,8 +336,6 @@ void z_vrfy_k_pipe_close(struct k_pipe *pipe)
 	z_impl_k_pipe_close(pipe);
 }
 #include <zephyr/syscalls/k_pipe_close_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 #endif /* CONFIG_USERSPACE */
 
 #ifdef CONFIG_OBJ_CORE_PIPE

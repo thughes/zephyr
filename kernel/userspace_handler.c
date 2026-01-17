@@ -87,5 +87,3 @@ static inline void *z_vrfy_k_object_alloc_size(enum k_objects otype, size_t size
 	return z_impl_k_object_alloc_size(otype, size);
 }
 #include <zephyr/syscalls/k_object_alloc_size_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);

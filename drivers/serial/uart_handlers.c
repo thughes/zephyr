@@ -185,6 +185,4 @@ static inline int z_vrfy_uart_drv_cmd(const struct device *dev, uint32_t cmd,
 	return z_impl_uart_drv_cmd((const struct device *)dev, cmd, p);
 }
 #include <zephyr/syscalls/uart_drv_cmd_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 #endif /* CONFIG_UART_DRV_CMD */

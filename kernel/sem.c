@@ -212,8 +212,6 @@ static inline unsigned int z_vrfy_k_sem_count_get(struct k_sem *sem)
 	return z_impl_k_sem_count_get(sem);
 }
 #include <zephyr/syscalls/k_sem_count_get_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 
 #endif /* CONFIG_USERSPACE */
 

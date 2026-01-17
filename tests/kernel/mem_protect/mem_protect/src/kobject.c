@@ -6,8 +6,6 @@
 
 #include "mem_protect.h"
 #include <zephyr/internal/syscall_handler.h>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 
 /* Kernel objects */
 

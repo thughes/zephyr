@@ -224,8 +224,6 @@ int z_vrfy_sys_clock_nanosleep(int clock_id, int flags, const struct timespec *r
 
 #ifdef CONFIG_ZTEST
 #include <zephyr/ztest.h>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 static void reset_clock_offset(void)
 {
 	K_SPINLOCK(&rt_clock_offset_lock) {

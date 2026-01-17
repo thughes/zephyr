@@ -60,8 +60,6 @@ static inline int z_vrfy_zephyr_write_stdout(const void *buf, int nbytes)
 	return z_impl_zephyr_write_stdout(buf, nbytes);
 }
 #include <zephyr/syscalls/zephyr_write_stdout_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 #endif
 
 #ifndef CONFIG_POSIX_DEVICE_IO_ALIAS_WRITE

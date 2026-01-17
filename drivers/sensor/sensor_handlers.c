@@ -79,6 +79,4 @@ static inline int z_vrfy_sensor_reconfigure_read_iodev(const struct rtio_iodev *
 	return z_impl_sensor_reconfigure_read_iodev(iodev, sensor, channels, num_channels);
 }
 #include <zephyr/syscalls/sensor_reconfigure_read_iodev_mrsh.c>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 #endif

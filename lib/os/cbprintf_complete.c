@@ -18,8 +18,6 @@
 #include <sys/types.h>
 #include <zephyr/sys/util.h>
 #include <zephyr/sys/cbprintf.h>
-#include <zephyr/logging/log.h>
-LOG_MODULE_DECLARE(os, CONFIG_KERNEL_LOG_LEVEL);
 
 /* newlib doesn't declare this function unless __POSIX_VISIBLE >= 200809.  No
  * idea how to make that happen, so lets put it right here.
