@@ -64,7 +64,7 @@ struct net_nbr {
 
 	/** Function to be called when the neighbor is removed. */
 	void (*const remove)(struct net_nbr *nbr);
-};
+} __net_nbr_align;
 
 /* This is an array of struct net_nbr + some additional data */
 #define NET_NBR_POOL_INIT(_name, _count, _size, _remove)		\
