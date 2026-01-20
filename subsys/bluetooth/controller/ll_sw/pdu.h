@@ -73,6 +73,8 @@
 #endif /* !CONFIG_BT_CTLR_ADV_EXT || !CONFIG_BT_BROADCASTER */
 
 /* Link Layer header size of Adv PDU. Assumes pdu_adv is packed */
+#include <zephyr/toolchain.h>
+
 #define PDU_AC_LL_HEADER_SIZE  (offsetof(struct pdu_adv, payload))
 
 /* Link Layer Advertisement channel maximum PDU buffer size */
@@ -417,6 +419,14 @@ struct pdu_adv_connect_ind {
 	} __packed;
 } __packed;
 
+/*
+ * The following structs contain flexible array members (FAMs) in nested
+ * structures or unions, which is a GNU extension. Clang warns about this
+ * with -Wgnu-variable-sized-type-not-at-end.
+ * We suppress this warning for these specific structs.
+ */
+TOOLCHAIN_DISABLE_CLANG_WARNING("-Wgnu-variable-sized-type-not-at-end")
+
 struct pdu_adv_ext_hdr {
 #ifdef CONFIG_LITTLE_ENDIAN
 	uint8_t adv_addr:1;
@@ -453,6 +463,8 @@ struct pdu_adv_com_ext_adv {
 		FLEXIBLE_ARRAY_DECLARE(uint8_t, ext_hdr_adv_data);
 	};
 } __packed;
+
+TOOLCHAIN_ENABLE_CLANG_WARNING("-Wgnu-variable-sized-type-not-at-end")
 
 enum pdu_adv_mode {
 	EXT_ADV_MODE_NON_CONN_NON_SCAN = 0x00,
@@ -550,6 +562,8 @@ enum pdu_adv_type {
 	PDU_ADV_TYPE_AUX_CONNECT_RSP = 0x08,
 } __packed;
 
+TOOLCHAIN_DISABLE_CLANG_WARNING("-Wgnu-variable-sized-type-not-at-end")
+
 struct pdu_adv {
 #ifdef CONFIG_LITTLE_ENDIAN
 	uint8_t type:4;
@@ -580,6 +594,8 @@ struct pdu_adv {
 #endif /* CONFIG_BT_CTLR_ADV_EXT */
 	} __packed;
 } __packed;
+
+TOOLCHAIN_ENABLE_CLANG_WARNING("-Wgnu-variable-sized-type-not-at-end")
 
 enum pdu_data_llid {
 	PDU_DATA_LLID_RESV = 0x00,

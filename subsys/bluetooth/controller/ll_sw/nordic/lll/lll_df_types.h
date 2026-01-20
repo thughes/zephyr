@@ -133,6 +133,8 @@ struct lll_df_sync {
 	struct lll_df_sync_cfg cfg[DOUBLE_BUFFER_SIZE];
 };
 
+#include <zephyr/toolchain.h>
+
 /* Parameters for reception of Constant Tone Extension in connected mode */
 struct lll_df_conn_rx_params {
 	uint8_t is_enabled:1;
@@ -142,6 +144,13 @@ struct lll_df_conn_rx_params {
 };
 
 /* Double buffer to store receive and sampling configuration for connected mode */
+/*
+ * The dbuf_hdr struct contains a flexible array member (FAM), which is a
+ * GNU extension. Clang warns about this with
+ * -Wgnu-variable-sized-type-not-at-end. We suppress this warning for
+ * this specific struct.
+ */
+TOOLCHAIN_DISABLE_CLANG_WARNING("-Wgnu-variable-sized-type-not-at-end")
 struct lll_df_conn_rx_cfg {
 	/* Stores information if the RX configuration was set at least once.
 	 * It is required for handling HCI_LE_Connection_CTE_Request_Enable HCI command.
@@ -156,6 +165,7 @@ struct lll_df_conn_rx_cfg {
 	struct dbuf_hdr hdr;
 	struct lll_df_conn_rx_params params[DOUBLE_BUFFER_SIZE];
 };
+TOOLCHAIN_ENABLE_CLANG_WARNING("-Wgnu-variable-sized-type-not-at-end")
 
 /* @brief Structure to store data required to prepare LE Connection IQ Report event or LE
  * Connectionless IQ Report event.
