@@ -143,15 +143,17 @@ extern "C" {
  * @retval true Message shall be compiled in.
  * @retval false Message shall removed during the compilation.
  */
-#define Z_LOG_CONST_LEVEL_CHECK(_level)					    \
+#define Z_LOG_CONST_LEVEL_CHECK_SUFFIX(_level, _suffix)					    \
 	(IS_ENABLED(CONFIG_LOG) &&					    \
 	(Z_LOG_LEVEL_CHECK(_level, CONFIG_LOG_OVERRIDE_LEVEL, LOG_LEVEL_NONE) \
 	||								    \
 	((IS_ENABLED(CONFIG_LOG_OVERRIDE_LEVEL) == false) &&		    \
-	((_level) <= __log_level) &&					    \
+	((_level) <= UTIL_CAT(__log_level, _suffix)) &&			    \
 	((_level) <= CONFIG_LOG_MAX_LEVEL)				    \
 	)								    \
 	))
+
+#define Z_LOG_CONST_LEVEL_CHECK(_level) Z_LOG_CONST_LEVEL_CHECK_SUFFIX(_level, )
 
 /** @brief Static level checking for instance logging.
  *
@@ -196,10 +198,13 @@ extern "C" {
  * @retval true Continue with log message creation.
  * @retval false Drop that message.
  */
-#define Z_LOG_LEVEL_ALL_CHECK(_level, _inst, _source)                                              \
-	(Z_LOG_CONST_LEVEL_CHECK(_level) &&                                                        \
+#define Z_LOG_LEVEL_ALL_CHECK_SUFFIX(_level, _inst, _source, _suffix)                              \
+	(Z_LOG_CONST_LEVEL_CHECK_SUFFIX(_level, _suffix) &&                                        \
 	 Z_LOG_STATIC_INST_LEVEL_CHECK(_level, _inst, _source) &&                                  \
 	 Z_LOG_DYNAMIC_LEVEL_CHECK(_level, _source))
+
+#define Z_LOG_LEVEL_ALL_CHECK(_level, _inst, _source) \
+	Z_LOG_LEVEL_ALL_CHECK_SUFFIX(_level, _inst, _source, )
 
 /** @brief Get current module data that is used for source id retrieving.
  *
@@ -209,6 +214,11 @@ extern "C" {
 #define Z_LOG_CURRENT_DATA()                                                                       \
 	COND_CODE_1(CONFIG_LOG_RUNTIME_FILTERING, \
 			(__log_current_dynamic_data), (__log_current_const_data))
+
+#define Z_LOG_CURRENT_DATA_SUFFIX(_suffix)                                                         \
+	COND_CODE_1(CONFIG_LOG_RUNTIME_FILTERING, \
+			(UTIL_CAT(__log_current_dynamic_data, _suffix)), \
+			(UTIL_CAT(__log_current_const_data, _suffix)))
 
 /*****************************************************************************/
 /****************** Definitions used by minimal logging *********************/
@@ -288,10 +298,10 @@ static inline char z_log_minimal_level_to_char(int level)
  *
  * @param ... String with arguments.
  */
-#define Z_LOG2(_level, _inst, _source, ...)                                                        \
+#define Z_LOG2_SUFFIX(_level, _inst, _source, _suffix, ...)                                        \
 	TOOLCHAIN_DISABLE_CLANG_WARNING(TOOLCHAIN_WARNING_USED_BUT_MARKED_UNUSED)                  \
 	do {                                                                                       \
-		if (!Z_LOG_LEVEL_ALL_CHECK(_level, _inst, _source)) {                              \
+		if (!Z_LOG_LEVEL_ALL_CHECK_SUFFIX(_level, _inst, _source, _suffix)) {              \
 			break;                                                                     \
 		}                                                                                  \
 		if (IS_ENABLED(CONFIG_LOG_MODE_MINIMAL)) {                                         \
@@ -317,7 +327,11 @@ static inline char z_log_minimal_level_to_char(int level)
 	} while (false)                                                                            \
 	TOOLCHAIN_ENABLE_CLANG_WARNING(TOOLCHAIN_WARNING_USED_BUT_MARKED_UNUSED)
 
+#define Z_LOG2(_level, _inst, _source, ...) Z_LOG2_SUFFIX(_level, _inst, _source, , __VA_ARGS__)
+
 #define Z_LOG(_level, ...)                 Z_LOG2(_level, 0, Z_LOG_CURRENT_DATA(), __VA_ARGS__)
+#define Z_LOG_SUFFIX(_suffix, _level, ...) \
+	Z_LOG2_SUFFIX(_level, 0, Z_LOG_CURRENT_DATA_SUFFIX(_suffix), _suffix, __VA_ARGS__)
 #define Z_LOG_INSTANCE(_level, _inst, ...) Z_LOG2(_level, 1, Z_LOG_INST(_inst), __VA_ARGS__)
 
 /*****************************************************************************/
@@ -343,10 +357,10 @@ static inline char z_log_minimal_level_to_char(int level)
  *
  * @param ... String.
  */
-#define Z_LOG_HEXDUMP2(_level, _inst, _source, _data, _len, ...)                                   \
+#define Z_LOG_HEXDUMP2_SUFFIX(_level, _inst, _source, _suffix, _data, _len, ...)                   \
 	TOOLCHAIN_DISABLE_CLANG_WARNING(TOOLCHAIN_WARNING_USED_BUT_MARKED_UNUSED)                  \
 	do {                                                                                       \
-		if (!Z_LOG_LEVEL_ALL_CHECK(_level, _inst, _source)) {                              \
+		if (!Z_LOG_LEVEL_ALL_CHECK_SUFFIX(_level, _inst, _source, _suffix)) {              \
 			break;                                                                     \
 		}                                                                                  \
 		const char *_str = GET_ARG_N(1, __VA_ARGS__);                                      \
@@ -366,8 +380,14 @@ static inline char z_log_minimal_level_to_char(int level)
 	} while (false)                                                                            \
 	TOOLCHAIN_ENABLE_CLANG_WARNING(TOOLCHAIN_WARNING_USED_BUT_MARKED_UNUSED)
 
+#define Z_LOG_HEXDUMP2(_level, _inst, _source, _data, _len, ...) \
+	Z_LOG_HEXDUMP2_SUFFIX(_level, _inst, _source, , _data, _len, __VA_ARGS__)
+
 #define Z_LOG_HEXDUMP(_level, _data, _length, ...)                                                 \
 	Z_LOG_HEXDUMP2(_level, 0, Z_LOG_CURRENT_DATA(), _data, _length, __VA_ARGS__)
+
+#define Z_LOG_HEXDUMP_SUFFIX(_suffix, _level, _data, _length, ...) \
+	Z_LOG_HEXDUMP2_SUFFIX(_level, 0, Z_LOG_CURRENT_DATA_SUFFIX(_suffix), _suffix, _data, _length, __VA_ARGS__)
 
 #define Z_LOG_HEXDUMP_INSTANCE(_level, _inst, _data, _length, ...)                                 \
 	Z_LOG_HEXDUMP2(_level, 1, Z_LOG_INST(_inst), _data, _length, __VA_ARGS__)

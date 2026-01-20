@@ -373,41 +373,9 @@ int k_usermode_string_copy(char *dst, const char *src, size_t maxlen);
 	bool expr_copy = !(expr); \
 	if (expr_copy) { \
 		LOG_MODULE_DECLARE_SUFFIX(_syscall, os, CONFIG_KERNEL_LOG_LEVEL); \
-		if (IS_ENABLED(CONFIG_LOG) && \
-		    (Z_LOG_LEVEL_CHECK(LOG_LEVEL_ERR, CONFIG_LOG_OVERRIDE_LEVEL, LOG_LEVEL_NONE) || \
-		     ((LOG_LEVEL_ERR <= _LOG_LEVEL_RESOLVE(os, CONFIG_KERNEL_LOG_LEVEL)) && \
-		      (LOG_LEVEL_ERR <= CONFIG_LOG_MAX_LEVEL) && \
-		      (LOG_LEVEL_ERR <= __log_level_syscall)))) { \
-			if (IS_ENABLED(CONFIG_LOG_MODE_MINIMAL)) { \
-				Z_LOG_TO_PRINTK(LOG_LEVEL_ERR, \
-					"syscall %s failed check: " fmt, \
-					__func__, ##__VA_ARGS__); \
-			} else { \
-				int _mode; \
-				bool string_ok; \
-				LOG_POINTERS_VALIDATE(string_ok, \
-					"syscall %s failed check: " fmt, \
-					__func__, ##__VA_ARGS__); \
-				if (!string_ok) { \
-					LOG_STRING_WARNING(_mode, \
-						COND_CODE_1(CONFIG_LOG_RUNTIME_FILTERING, \
-							(__log_current_dynamic_data_syscall), \
-							(__log_current_const_data_syscall)), \
-						"syscall %s failed check: " fmt, \
-						__func__, ##__VA_ARGS__); \
-				} else { \
-					Z_LOG_MSG_CREATE( \
-						UTIL_NOT(IS_ENABLED(CONFIG_USERSPACE)), \
-						_mode, Z_LOG_LOCAL_DOMAIN_ID, \
-						COND_CODE_1(CONFIG_LOG_RUNTIME_FILTERING, \
-							(__log_current_dynamic_data_syscall), \
-							(__log_current_const_data_syscall)), \
-						LOG_LEVEL_ERR, NULL, \
-						0, "syscall %s failed check: " fmt, \
-						__func__, ##__VA_ARGS__); \
-				} \
-			} \
-		} \
+		Z_LOG_SUFFIX(_syscall, LOG_LEVEL_ERR, \
+			"syscall %s failed check: " fmt, \
+			__func__, ##__VA_ARGS__);
 	} \
 	expr_copy; })
 
