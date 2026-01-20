@@ -621,6 +621,13 @@ do {                                                                    \
  * @return X rounded up to the next power of two
  */
 #define Z_POW2_CEIL(x) \
+	/* \
+	 * The usage of __builtin_clzl() makes this a GNU extension. \
+	 * We suppress the warning with __extension__ to allow using \
+	 * this macro in C standard constant expressions (e.g. array \
+	 * sizes). \
+	 */ \
+	__extension__ \
 	((x) <= 2UL ? (x) : (1UL << (8 * sizeof(long) - __builtin_clzl((x) - 1))))
 
 /**
