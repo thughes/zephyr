@@ -1380,8 +1380,10 @@ static int lsm6dsv16x_pm_action(const struct device *dev, enum pm_device_action 
 		.stmemsc_cfg = {							\
 			.i3c = &prefix##_data_##inst.i3c_dev,				\
 		},									\
-		.i3c.bus = DEVICE_DT_GET(DT_INST_BUS(inst)),				\
-		.i3c.dev_id = I3C_DEVICE_ID_DT_INST(inst),				\
+		.i3c = {								\
+			.bus = DEVICE_DT_GET(DT_INST_BUS(inst)),			\
+			.dev_id = I3C_DEVICE_ID_DT_INST(inst),				\
+		},									\
 		IF_ENABLED(CONFIG_LSM6DSV16X_TRIGGER,					\
 			  (.int_en_i3c = DT_INST_PROP(inst, int_en_i3c),		\
 			   .bus_act_sel = DT_INST_ENUM_IDX(inst, bus_act_sel_us),))	\
