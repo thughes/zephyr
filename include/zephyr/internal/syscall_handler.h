@@ -375,7 +375,7 @@ int k_usermode_string_copy(char *dst, const char *src, size_t maxlen);
 		LOG_MODULE_DECLARE_SUFFIX(_syscall, os, CONFIG_KERNEL_LOG_LEVEL); \
 		Z_LOG_SUFFIX(_syscall, LOG_LEVEL_ERR, \
 			"syscall %s failed check: " fmt, \
-			__func__, ##__VA_ARGS__);
+			__func__, ##__VA_ARGS__); \
 	} \
 	expr_copy; })
 
