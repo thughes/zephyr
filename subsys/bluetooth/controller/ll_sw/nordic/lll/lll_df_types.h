@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#include <zephyr/toolchain.h>
+
 /* @brief Max supported CTE length in 8us units */
 #define LLL_DF_MAX_CTE_LEN 20
 /* @brief Min supported CTE length in 8us units */
@@ -132,8 +134,6 @@ struct lll_df_sync {
 	uint8_t last;
 	struct lll_df_sync_cfg cfg[DOUBLE_BUFFER_SIZE];
 };
-
-#include <zephyr/toolchain.h>
 
 /* Parameters for reception of Constant Tone Extension in connected mode */
 struct lll_df_conn_rx_params {

@@ -5,6 +5,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#include <zephyr/toolchain.h>
+
 /*
  * PDU fields sizes
  */
@@ -73,8 +75,6 @@
 #endif /* !CONFIG_BT_CTLR_ADV_EXT || !CONFIG_BT_BROADCASTER */
 
 /* Link Layer header size of Adv PDU. Assumes pdu_adv is packed */
-#include <zephyr/toolchain.h>
-
 #define PDU_AC_LL_HEADER_SIZE  (offsetof(struct pdu_adv, payload))
 
 /* Link Layer Advertisement channel maximum PDU buffer size */
