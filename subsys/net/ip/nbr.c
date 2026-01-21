@@ -41,8 +41,7 @@ void net_nbr_unref(struct net_nbr *nbr)
 }
 
 #if defined(CONFIG_NET_IPV6_NBR_CACHE_LOG_LEVEL_DBG)
-struct net_nbr *net_nbr_ref_debug(struct net_nbr *nbr, const char *caller,
-				  int line)
+struct net_nbr *net_nbr_ref_debug(struct net_nbr *nbr, const char *caller, int line)
 #else
 struct net_nbr *net_nbr_ref(struct net_nbr *nbr)
 #endif
@@ -62,7 +61,7 @@ static inline struct net_nbr *get_nbr(struct net_nbr *start, int idx)
 	NET_ASSERT(idx < CONFIG_NET_IPV6_MAX_NEIGHBORS);
 
 	return (struct net_nbr *)((uint8_t *)start +
-			((sizeof(struct net_nbr) + start->size) * idx));
+				  ((sizeof(struct net_nbr) + start->size) * idx));
 }
 
 struct net_nbr *net_nbr_get(struct net_nbr_table *table)
@@ -82,8 +81,7 @@ struct net_nbr *net_nbr_get(struct net_nbr_table *table)
 	return NULL;
 }
 
-int net_nbr_link(struct net_nbr *nbr, struct net_if *iface,
-		 const struct net_linkaddr *lladdr)
+int net_nbr_link(struct net_nbr *nbr, struct net_if *iface, const struct net_linkaddr *lladdr)
 {
 	int i, avail = -1;
 
@@ -97,9 +95,7 @@ int net_nbr_link(struct net_nbr *nbr, struct net_if *iface,
 		}
 
 		if (net_neighbor_lladdr[i].ref &&
-		    !memcmp(lladdr->addr,
-			    net_neighbor_lladdr[i].lladdr.addr,
-			    lladdr->len)) {
+		    !memcmp(lladdr->addr, net_neighbor_lladdr[i].lladdr.addr, lladdr->len)) {
 			/* We found same lladdr in nbr cache so just
 			 * increase the ref count.
 			 */
@@ -122,9 +118,7 @@ int net_nbr_link(struct net_nbr *nbr, struct net_if *iface,
 	net_neighbor_lladdr[avail].ref++;
 	nbr->idx = avail;
 
-	net_linkaddr_set(&net_neighbor_lladdr[avail].lladdr,
-			 (uint8_t *)lladdr->addr,
-			 lladdr->len);
+	net_linkaddr_set(&net_neighbor_lladdr[avail].lladdr, (uint8_t *)lladdr->addr, lladdr->len);
 	net_neighbor_lladdr[avail].lladdr.len = lladdr->len;
 	net_neighbor_lladdr[avail].lladdr.type = lladdr->type;
 
@@ -157,8 +151,7 @@ int net_nbr_unlink(struct net_nbr *nbr, struct net_linkaddr *lladdr)
 	return 0;
 }
 
-struct net_nbr *net_nbr_lookup(struct net_nbr_table *table,
-			       struct net_if *iface,
+struct net_nbr *net_nbr_lookup(struct net_nbr_table *table, struct net_if *iface,
 			       struct net_linkaddr *lladdr)
 {
 	int i;
@@ -166,10 +159,8 @@ struct net_nbr *net_nbr_lookup(struct net_nbr_table *table,
 	for (i = 0; i < table->nbr_count; i++) {
 		struct net_nbr *nbr = get_nbr(table->nbr, i);
 
-		if (nbr->ref && nbr->iface == iface &&
-		    net_neighbor_lladdr[nbr->idx].ref &&
-		    !memcmp(net_neighbor_lladdr[nbr->idx].lladdr.addr,
-			    lladdr->addr, lladdr->len)) {
+		if (nbr->ref && nbr->iface == iface && net_neighbor_lladdr[nbr->idx].ref &&
+		    !memcmp(net_neighbor_lladdr[nbr->idx].lladdr.addr, lladdr->addr, lladdr->len)) {
 			return nbr;
 		}
 	}
@@ -179,8 +170,7 @@ struct net_nbr *net_nbr_lookup(struct net_nbr_table *table,
 
 struct net_linkaddr *net_nbr_get_lladdr(uint8_t idx)
 {
-	NET_ASSERT(idx < CONFIG_NET_IPV6_MAX_NEIGHBORS,
-		   "idx %d >= max %d", idx,
+	NET_ASSERT(idx < CONFIG_NET_IPV6_MAX_NEIGHBORS, "idx %d >= max %d", idx,
 		   CONFIG_NET_IPV6_MAX_NEIGHBORS);
 
 	return &net_neighbor_lladdr[idx].lladdr;
@@ -219,13 +209,12 @@ void net_nbr_print(struct net_nbr_table *table)
 
 			NET_DBG("[%d] nbr %p data %p ref %d iface %p idx %d "
 				"ll %s",
-				i, nbr, nbr->data, nbr->ref, nbr->iface,
-				nbr->idx,
-				nbr->idx == NET_NBR_LLADDR_UNKNOWN ?
-				"<unknown>" :
-				net_sprint_ll_addr(
-				   net_neighbor_lladdr[nbr->idx].lladdr.addr,
-				   net_neighbor_lladdr[nbr->idx].lladdr.len));
+				i, nbr, nbr->data, nbr->ref, nbr->iface, nbr->idx,
+				nbr->idx == NET_NBR_LLADDR_UNKNOWN
+					? "<unknown>"
+					: net_sprint_ll_addr(
+						  net_neighbor_lladdr[nbr->idx].lladdr.addr,
+						  net_neighbor_lladdr[nbr->idx].lladdr.len));
 		}
 	}
 }

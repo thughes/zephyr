@@ -34,8 +34,7 @@ struct net_nbr_lladdr {
 	uint8_t ref;
 };
 
-#define NET_NBR_LLADDR_INIT(_name, _count)	\
-	struct net_nbr_lladdr _name[_count] = { }
+#define NET_NBR_LLADDR_INIT(_name, _count) struct net_nbr_lladdr _name[_count] = {}
 
 /* Alignment needed for various parts of the neighbor definition */
 #define __net_nbr_align __aligned(sizeof(int))
@@ -67,15 +66,14 @@ struct net_nbr {
 } __net_nbr_align;
 
 /* This is an array of struct net_nbr + some additional data */
-#define NET_NBR_POOL_INIT(_name, _count, _size, _remove)		\
-	struct {							\
-		struct net_nbr nbr;					\
-		uint8_t data[ROUND_UP(_size, 4)] __net_nbr_align;	\
-	} _name[_count] = {						\
-		[0 ... (_count - 1)] = { .nbr = {			\
-			.idx = NET_NBR_LLADDR_UNKNOWN,			\
-			.remove = _remove,				\
-			.size = ROUND_UP(_size, 4) } },			\
+#define NET_NBR_POOL_INIT(_name, _count, _size, _remove)                                           \
+	struct {                                                                                   \
+		struct net_nbr nbr;                                                                \
+		uint8_t data[ROUND_UP(_size, 4)] __net_nbr_align;                                  \
+	} _name[_count] = {                                                                        \
+		[0 ...(_count - 1)] = {.nbr = {.idx = NET_NBR_LLADDR_UNKNOWN,                      \
+					       .remove = _remove,                                  \
+					       .size = ROUND_UP(_size, 4)}},                       \
 	}
 
 struct net_nbr_table {
@@ -94,16 +92,14 @@ struct net_nbr_table {
 
 /* Type of the table can be NET_NBR_LOCAL or NET_NBR_GLOBAL
  */
-#define NET_NBR_TABLE_INIT(_type, _name, _pool, _clear)			\
-	_type struct net_nbr_table_##_name {				\
-		struct net_nbr_table table;				\
-	} net_##_name __used = {					\
-		.table = {						\
-			.clear = _clear,				\
-			.nbr = (struct net_nbr *)_pool,			\
-			.nbr_count = ARRAY_SIZE(_pool),			\
-		}							\
-	}
+#define NET_NBR_TABLE_INIT(_type, _name, _pool, _clear)                                            \
+	_type struct net_nbr_table_##_name {                                                       \
+		struct net_nbr_table table;                                                        \
+	} net_##_name __used = {.table = {                                                         \
+					.clear = _clear,                                           \
+					.nbr = (struct net_nbr *)_pool,                            \
+					.nbr_count = ARRAY_SIZE(_pool),                            \
+				}}
 
 /**
  * @brief Decrement the reference count. If count goes to 0, the neighbor
@@ -123,8 +119,7 @@ void net_nbr_unref(struct net_nbr *nbr);
  * @return Pointer to neighbor
  */
 #if defined(CONFIG_NET_IPV6_NBR_CACHE_LOG_LEVEL_DBG)
-struct net_nbr *net_nbr_ref_debug(struct net_nbr *nbr, const char *caller,
-				  int line);
+struct net_nbr *net_nbr_ref_debug(struct net_nbr *nbr, const char *caller, int line);
 #define net_nbr_ref(nbr) net_nbr_ref_debug(nbr, __func__, __LINE__)
 #else
 struct net_nbr *net_nbr_ref(struct net_nbr *nbr);
@@ -144,8 +139,7 @@ struct net_nbr *net_nbr_get(struct net_nbr_table *table);
  * @param lladdr Neighbor link layer address
  * @return Pointer to neighbor, NULL if not found
  */
-struct net_nbr *net_nbr_lookup(struct net_nbr_table *table,
-			       struct net_if *iface,
+struct net_nbr *net_nbr_lookup(struct net_nbr_table *table, struct net_if *iface,
 			       struct net_linkaddr *lladdr);
 
 /**
@@ -155,8 +149,7 @@ struct net_nbr *net_nbr_lookup(struct net_nbr_table *table,
  * @param lladdr Neighbor link layer address
  * @return 0 if ok, <0 if linking failed
  */
-int net_nbr_link(struct net_nbr *nbr, struct net_if *iface,
-		 const struct net_linkaddr *lladdr);
+int net_nbr_link(struct net_nbr *nbr, struct net_if *iface, const struct net_linkaddr *lladdr);
 
 /**
  * @brief Unlink a neighbor from specific link layer address.
