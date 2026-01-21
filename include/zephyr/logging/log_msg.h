@@ -336,13 +336,11 @@ do { \
 		CBPRINTF_STATIC_PACKAGE(NULL, 0, _plen, Z_LOG_MSG_ALIGN_OFFSET, _options, \
 					__VA_ARGS__); \
 	} \
-	TOOLCHAIN_DISABLE_WARNING(TOOLCHAIN_WARNING_SHADOW) \
-	struct log_msg *_msg; \
-	TOOLCHAIN_ENABLE_WARNING(TOOLCHAIN_WARNING_SHADOW) \
-	Z_LOG_MSG_ON_STACK_ALLOC(_msg, Z_LOG_MSG_LEN(_plen, 0)); \
+	struct log_msg *_z_log_msg; \
+	Z_LOG_MSG_ON_STACK_ALLOC(_z_log_msg, Z_LOG_MSG_LEN(_plen, 0)); \
 	Z_LOG_ARM64_VLA_PROTECT(); \
 	if (_plen != 0) { \
-		CBPRINTF_STATIC_PACKAGE(_msg->data, _plen, \
+		CBPRINTF_STATIC_PACKAGE(_z_log_msg->data, _plen, \
 					_plen, Z_LOG_MSG_ALIGN_OFFSET, _options, \
 					__VA_ARGS__);\
 	} \
@@ -351,7 +349,7 @@ do { \
 					   (uint32_t)_plen, _dlen); \
 	LOG_MSG_DBG("creating message on stack: package len: %d, data len: %d\n", \
 			_plen, (int)(_dlen)); \
-	z_log_msg_static_create((void *)(_source), _desc, _msg->data, (_data)); \
+	z_log_msg_static_create((void *)(_source), _desc, _z_log_msg->data, (_data)); \
 } while (false)
 
 #ifdef CONFIG_LOG_SPEED
@@ -361,18 +359,18 @@ do { \
 				Z_LOG_MSG_CBPRINTF_FLAGS(_cstr_cnt), \
 				__VA_ARGS__); \
 	size_t _msg_wlen = Z_LOG_MSG_ALIGNED_WLEN(_plen, 0); \
-	struct log_msg *_msg = z_log_msg_alloc(_msg_wlen); \
+	struct log_msg *_z_log_msg = z_log_msg_alloc(_msg_wlen); \
 	struct log_msg_desc _desc = \
 		Z_LOG_MSG_DESC_INITIALIZER(_domain_id, _level, (uint32_t)_plen, 0); \
 	LOG_MSG_DBG("creating message zero copy: package len: %d, msg: %p\n", \
-			_plen, _msg); \
-	if (_msg) { \
-		CBPRINTF_STATIC_PACKAGE(_msg->data, _plen, _plen, \
+			_plen, _z_log_msg); \
+	if (_z_log_msg) { \
+		CBPRINTF_STATIC_PACKAGE(_z_log_msg->data, _plen, _plen, \
 					Z_LOG_MSG_ALIGN_OFFSET, \
 					Z_LOG_MSG_CBPRINTF_FLAGS(_cstr_cnt), \
 					__VA_ARGS__); \
 	} \
-	z_log_msg_finalize(_msg, (void *)_source, _desc, NULL); \
+	z_log_msg_finalize(_z_log_msg, (void *)_source, _desc, NULL); \
 } while (false)
 #else
 /* Alternative empty macro created to speed up compilation when LOG_SPEED is

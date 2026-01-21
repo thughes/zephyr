@@ -6,3 +6,4 @@ project(log_msg)
 
 FILE(GLOB app_sources src/*.c)
 target_sources(app PRIVATE ${app_sources})
+target_compile_options(app PRIVATE -Wshadow)
