@@ -87,7 +87,6 @@ check_set_compiler_property(PROPERTY warning_extended
                             -Wno-self-assign
                             -Wno-initializer-overrides
                             -Wno-section
-                            -Wno-gnu
 )
 
 set_compiler_property(PROPERTY warning_error_coding_guideline
