@@ -562,8 +562,6 @@ enum pdu_adv_type {
 	PDU_ADV_TYPE_AUX_CONNECT_RSP = 0x08,
 } __packed;
 
-TOOLCHAIN_DISABLE_CLANG_WARNING("-Wgnu-variable-sized-type-not-at-end")
-
 struct pdu_adv {
 #ifdef CONFIG_LITTLE_ENDIAN
 	uint8_t type:4;
@@ -594,8 +592,6 @@ struct pdu_adv {
 #endif /* CONFIG_BT_CTLR_ADV_EXT */
 	} __packed;
 } __packed;
-
-TOOLCHAIN_ENABLE_CLANG_WARNING("-Wgnu-variable-sized-type-not-at-end")
 
 enum pdu_data_llid {
 	PDU_DATA_LLID_RESV = 0x00,
