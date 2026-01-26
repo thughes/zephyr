@@ -338,7 +338,7 @@ void z_check_stack_sentinel(void)
 		return;
 	}
 
-	stack = (uint32_t *)_current->stack_info.start;
+	stack = (uint32_t *)(_current->stack_info.start - 4);
 	if (*stack != STACK_SENTINEL) {
 		/* Restore it so further checks don't trigger this same error */
 		*stack = STACK_SENTINEL;
@@ -467,6 +467,8 @@ static char *setup_thread_stack(struct k_thread *new_thread,
 	 * if it isn't.
 	 */
 	*((uint32_t *)stack_buf_start) = STACK_SENTINEL;
+	stack_buf_start += 4;
+	stack_buf_size -= 4;
 #endif /* CONFIG_STACK_SENTINEL */
 #ifdef CONFIG_THREAD_LOCAL_STORAGE
 	/* TLS is always last within the stack buffer */
@@ -971,17 +973,6 @@ int z_stack_space_get(const uint8_t *stack_start, size_t size, size_t *unused_pt
 		return -ENOTSUP;
 	}
 
-	if (IS_ENABLED(CONFIG_STACK_SENTINEL)) {
-		/* First 4 bytes of the stack buffer reserved for the
-		 * sentinel value, it won't be 0xAAAAAAAA for thread
-		 * stacks.
-		 *
-		 * FIXME: thread->stack_info.start ought to reflect
-		 * this!
-		 */
-		checked_stack += 4;
-		size -= 4;
-	}
 
 	for (size_t i = 0; i < size; i++) {
 		if ((checked_stack[i]) == 0xaaU) {
