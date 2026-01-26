@@ -514,18 +514,20 @@ void tp_new_find_and_apply(struct tp_new *tp, const char *key, void *value,
 
 enum tp_type json_decode_msg(void *data, size_t data_len)
 {
-	int decoded;
+	int64_t decoded;
 	struct tp_msg tp;
 
 	memset(&tp, 0, sizeof(tp));
 
 	decoded = json_obj_parse(data, data_len, tp_msg_dsc,
 					ARRAY_SIZE(tp_msg_dsc), &tp);
-#if 0
-	if ((decoded & 1) == false) { /* TODO: this fails, why? */
-		tp_err("json_obj_parse()");
+
+	if (decoded < 0) {
+		tp_dbg("json_obj_parse() error: %d", (int)decoded);
+	} else if ((decoded & 1) == 0) {
+		tp_dbg("json_obj_parse() no msg field");
 	}
-#endif
+
 	tp_dbg("%s", tp.msg);
 
 	return tp.msg ? tp_msg_to_type(tp.msg) : TP_NONE;
