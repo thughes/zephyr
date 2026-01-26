@@ -1,0 +1,6 @@
+tests:
+  kernel.stack.sentinel:
+    tags:
+      - kernel
+    platform_allow:
+      - native_sim

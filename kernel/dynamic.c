@@ -106,7 +106,13 @@ static void dyn_cb(const struct k_thread *thread, void *user_data)
 {
 	struct dyn_cb_data *const data = (struct dyn_cb_data *)user_data;
 
-	if (data->stack == (k_thread_stack_t *)thread->stack_info.start) {
+	uintptr_t stack_start = thread->stack_info.start;
+
+	if (IS_ENABLED(CONFIG_STACK_SENTINEL)) {
+		stack_start -= 4;
+	}
+
+	if (data->stack == (k_thread_stack_t *)stack_start) {
 		__ASSERT(data->tid == NULL, "stack %p is associated with more than one thread!",
 			 (void *)thread->stack_info.start);
 		data->tid = (k_tid_t)thread;
