@@ -13,6 +13,7 @@
 #include <stddef.h>
 #include <zephyr/types.h>
 #include <stdbool.h>
+#include <zephyr/toolchain.h>
 
 #include <zephyr/net/net_if.h>
 
@@ -73,6 +74,7 @@ struct net_nbr {
 
 /* This is an array of struct net_nbr + some additional data */
 #define NET_NBR_POOL_INIT(_name, _count, _size, _remove)		\
+	TOOLCHAIN_DISABLE_CLANG_WARNING("-Wgnu-variable-sized-type-not-at-end") \
 	struct {							\
 		struct net_nbr nbr;					\
 		uint8_t data[ROUND_UP(_size, 4)] __net_nbr_align;	\
@@ -81,7 +83,8 @@ struct net_nbr {
 			.idx = NET_NBR_LLADDR_UNKNOWN,			\
 			.remove = _remove,				\
 			.size = ROUND_UP(_size, 4) } },			\
-	}
+	} \
+	TOOLCHAIN_ENABLE_CLANG_WARNING("-Wgnu-variable-sized-type-not-at-end")
 
 struct net_nbr_table {
 	/** Link to a neighbor pool */
