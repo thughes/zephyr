@@ -1,0 +1,3 @@
+tests:
+  kernel.stack.sentinel:
+    tags: kernel stack
