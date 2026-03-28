@@ -1,0 +1,10 @@
+common:
+  tags: ec_host_cmd
+  platform_allow: native_sim
+tests:
+  mgmt.ec_host_cmd.validation.small_tx:
+    extra_configs:
+      - CONFIG_EC_HOST_CMD_HANDLER_TX_BUFFER_SIZE=4
+  mgmt.ec_host_cmd.validation.small_rx:
+    extra_configs:
+      - CONFIG_EC_HOST_CMD_HANDLER_RX_BUFFER_SIZE=4
