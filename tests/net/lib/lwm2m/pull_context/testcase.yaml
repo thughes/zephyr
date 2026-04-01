@@ -1,0 +1,4 @@
+tests:
+  net.lwm2m.pull_context.over_read:
+    tags: net lwm2m
+    platform_allow: native_sim

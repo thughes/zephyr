@@ -1049,4 +1049,73 @@ ZTEST(dns_resolve, test_dns_unpack_name_overflow)
 	}
 }
 
+extern int dns_validate_msg(struct dns_resolve_context *ctx,
+		     struct dns_msg_t *dns_msg,
+		     uint16_t *dns_id,
+		     int *query_idx,
+		     struct net_buf *dns_cname,
+		     uint16_t *query_hash);
+
+ZTEST(dns_resolve, test_dns_srv_overflow)
+{
+	struct dns_resolve_context *ctx = dns_resolve_get_default();
+	struct dns_msg_t dns_msg;
+	uint16_t dns_id = 0x1234;
+	int query_idx = 0;
+	uint16_t query_hash = 0;
+	int ret;
+
+	uint8_t buf[64];
+	memset(buf, 0, sizeof(buf));
+
+	// Header
+	sys_put_be16(dns_id, buf);
+	sys_put_be16(0x8400, buf + 2); // QR=1, AA=1, RD=0, RA=0, RCODE=0
+	sys_put_be16(1, buf + 4); // QDCOUNT
+	sys_put_be16(1, buf + 6); // ANCOUNT
+
+	// Query
+	uint8_t *ptr = buf + 12;
+	// 3srv7example3com0
+	memcpy(ptr, "\003srv\007example\003com\000", 17);
+	ptr += 17;
+	sys_put_be16(DNS_RR_TYPE_SRV, ptr); ptr += 2;
+	sys_put_be16(DNS_CLASS_IN, ptr); ptr += 2;
+
+	// Answer
+	// Name pointer (0xc00c) pointing to offset 12
+	sys_put_be16(0xc00c, ptr); ptr += 2;
+	sys_put_be16(DNS_RR_TYPE_SRV, ptr); ptr += 2;
+	sys_put_be16(DNS_CLASS_IN, ptr); ptr += 2;
+	sys_put_be32(100, ptr); ptr += 4; // TTL
+	sys_put_be16(20, ptr); ptr += 2; // RDLENGTH = 20
+
+	// Packet ends here!
+
+	dns_msg.msg = buf;
+	dns_msg.msg_size = ptr - buf;
+
+	ret = dns_resolve_name(ctx, "srv.example.com",
+			       DNS_QUERY_TYPE_SRV,
+			       &dns_id,
+			       dns_result_cb_dummy,
+			       NULL,
+			       DNS_TIMEOUT);
+	zassert_equal(ret, 0, "Cannot create SRV query");
+
+	// Now update my malicious packet with `dns_id`.
+	sys_put_be16(dns_id, buf);
+
+	// Now call `dns_validate_msg`.
+	// query_idx needs to be -1 initially for it to search.
+	query_idx = -1;
+
+	// Call
+	ret = dns_validate_msg(ctx, &dns_msg, &dns_id, &query_idx, NULL, &query_hash);
+
+	// Assert
+	zassert_equal(ret, DNS_EAI_SYSTEM, "Should fail with DNS_EAI_SYSTEM, got %d, errno %d", ret, errno);
+	zassert_equal(errno, EMSGSIZE, "Errno should be EMSGSIZE, got %d", errno);
+}
+
 ZTEST_SUITE(dns_resolve, NULL, test_init, NULL, NULL, NULL);

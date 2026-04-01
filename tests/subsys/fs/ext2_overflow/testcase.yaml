@@ -1,0 +1,7 @@
+common:
+  tags: fs ext2
+  platform_allow: native_sim
+tests:
+  fs.ext2.format.overflow:
+    extra_configs:
+      - CONFIG_ASAN=y

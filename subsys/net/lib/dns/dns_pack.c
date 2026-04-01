@@ -347,7 +347,9 @@ int dns_unpack_response_query(struct dns_msg_t *dns_msg)
 	buf = dns_query + qname_size;
 	if (dns_unpack_query_qtype(buf) != DNS_RR_TYPE_A &&
 	    dns_unpack_query_qtype(buf) != DNS_RR_TYPE_AAAA &&
-	    dns_unpack_query_qtype(buf) != DNS_RR_TYPE_PTR) {
+	    dns_unpack_query_qtype(buf) != DNS_RR_TYPE_PTR &&
+	    dns_unpack_query_qtype(buf) != DNS_RR_TYPE_SRV &&
+	    dns_unpack_query_qtype(buf) != DNS_RR_TYPE_TXT) {
 		return -EINVAL;
 	}
 
