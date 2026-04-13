@@ -39,6 +39,8 @@
 extern sys_slist_t llext_list;
 extern struct k_mutex llext_lock;
 
+struct llext *z_llext_get_by_name(const char *name);
+
 /*
  * Memory management (llext_mem.c)
  */
