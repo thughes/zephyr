@@ -80,6 +80,21 @@ ssize_t llext_find_section(struct llext_loader *ldr, const char *search_name)
 	return -ENOENT;
 }
 
+struct llext *z_llext_get_by_name(const char *name)
+{
+	for (sys_snode_t *node = sys_slist_peek_head(&llext_list);
+	     node != NULL;
+	     node = sys_slist_peek_next(node)) {
+		struct llext *ext = CONTAINER_OF(node, struct llext, llext_list);
+
+		if (strncmp(ext->name, name, LLEXT_MAX_NAME_LEN) == 0) {
+			return ext;
+		}
+	}
+
+	return NULL;
+}
+
 /*
  * Note, that while we protect the global llext list while searching, we release
  * the lock before returning the found extension to the caller. Therefore it's
@@ -88,21 +103,13 @@ ssize_t llext_find_section(struct llext_loader *ldr, const char *search_name)
  */
 struct llext *llext_by_name(const char *name)
 {
+	struct llext *ext;
+
 	k_mutex_lock(&llext_lock, K_FOREVER);
-
-	for (sys_snode_t *node = sys_slist_peek_head(&llext_list);
-	     node != NULL;
-	     node = sys_slist_peek_next(node)) {
-		struct llext *ext = CONTAINER_OF(node, struct llext, llext_list);
-
-		if (strncmp(ext->name, name, LLEXT_MAX_NAME_LEN) == 0) {
-			k_mutex_unlock(&llext_lock);
-			return ext;
-		}
-	}
-
+	ext = z_llext_get_by_name(name);
 	k_mutex_unlock(&llext_lock);
-	return NULL;
+
+	return ext;
 }
 
 int llext_iterate(int (*fn)(struct llext *ext, void *arg), void *arg)
@@ -169,9 +176,9 @@ int llext_load(struct llext_loader *ldr, const char *name, struct llext **ext,
 {
 	int ret;
 
-	*ext = llext_by_name(name);
-
 	k_mutex_lock(&llext_lock, K_FOREVER);
+
+	*ext = z_llext_get_by_name(name);
 
 	if (*ext) {
 		/* The use count is at least 1 */
@@ -229,7 +236,6 @@ int llext_unload(struct llext **ext)
 		return ret;
 	}
 
-	/* FIXME: protect the global list */
 	sys_slist_find_and_remove(&llext_list, &tmp->llext_list);
 
 	llext_dependency_remove_all(tmp);

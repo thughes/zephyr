@@ -146,29 +146,34 @@ int llext_restore(struct llext **ext, struct llext_loader **ldr, unsigned int n_
 	llext_free(exp_tab);
 
 	/* Restore dependencies previously saved by llext_relink_dependency() */
+	k_mutex_lock(&llext_lock, K_FOREVER);
 	SYS_SLIST_FOR_EACH_CONTAINER(&llext_list, next, llext_list) {
 		for (j = 0; next->dependency[j] && j < ARRAY_SIZE(next->dependency); j++) {
 			if (next->dependency[j] < first || next->dependency[j] >= last) {
 				/* Inconsistency detected */
 				LOG_ERR("dependency out of range");
 				ret = -EINVAL;
-				goto free_locked;
+				goto free_unlocked;
 			}
 
-			next->dependency[j] = llext_by_name(next->dependency[j]->name);
+			next->dependency[j] = z_llext_get_by_name(next->dependency[j]->name);
 			if (!next->dependency[j]) {
 				/* Bug in the algorithm */
 				LOG_ERR("dependency not found");
 				ret = -EFAULT;
-				goto free_locked;
+				goto free_unlocked;
 			}
 
 			LOG_DBG("restore %s depends on %s",
 				next->name, next->dependency[j]->name);
 		}
 	}
+	k_mutex_unlock(&llext_lock);
 
 	return 0;
+
+free_unlocked:
+	k_mutex_unlock(&llext_lock);
 
 free_locked:
 	k_mutex_lock(&llext_lock, K_FOREVER);
