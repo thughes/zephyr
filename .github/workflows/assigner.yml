@@ -76,8 +76,6 @@ jobs:
           echo "Unknown event: ${{ github.event_name }}"
           exit 1
         fi
-      env:
-        GITHUB_TOKEN: ${{ secrets.ZB_PR_ASSIGNER_GITHUB_TOKEN }}
         python3 scripts/ci/set_assignees.py $FLAGS
 
     - name: Check maintainer file changes
