@@ -66,7 +66,10 @@ def main(argv):
     args = parse_args(argv)
 
     auth = github.Auth.Token(os.environ.get('GITHUB_TOKEN', None))
-    gh = github.Github(auth=auth)
+    if os.environ.get('GITHUB_TOKEN', None):
+        gh = github.Github(auth=auth)
+    else:
+        gh = github.Github()
 
     print_rate_limit(gh, args.org)
 
