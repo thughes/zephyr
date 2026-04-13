@@ -338,7 +338,7 @@ void z_check_stack_sentinel(void)
 		return;
 	}
 
-	stack = (uint32_t *)_current->stack_info.start;
+	stack = (uint32_t *)(_current->stack_info.start - 4);
 	if (*stack != STACK_SENTINEL) {
 		/* Restore it so further checks don't trigger this same error */
 		*stack = STACK_SENTINEL;
@@ -492,8 +492,13 @@ static char *setup_thread_stack(struct k_thread *new_thread,
 	 * The bounds tracked here correspond to the area of the stack object
 	 * that the thread can access, which includes TLS.
 	 */
+#ifdef CONFIG_STACK_SENTINEL
+	new_thread->stack_info.start = (uintptr_t)stack_buf_start + 4;
+	new_thread->stack_info.size = stack_buf_size - 4;
+#else
 	new_thread->stack_info.start = (uintptr_t)stack_buf_start;
 	new_thread->stack_info.size = stack_buf_size;
+#endif
 	new_thread->stack_info.delta = delta;
 
 #ifdef CONFIG_THREAD_RUNTIME_STACK_SAFETY
@@ -976,11 +981,8 @@ int z_stack_space_get(const uint8_t *stack_start, size_t size, size_t *unused_pt
 		 * sentinel value, it won't be 0xAAAAAAAA for thread
 		 * stacks.
 		 *
-		 * FIXME: thread->stack_info.start ought to reflect
-		 * this!
+		 * stack_start has already been updated to account for this.
 		 */
-		checked_stack += 4;
-		size -= 4;
 	}
 
 	for (size_t i = 0; i < size; i++) {

@@ -593,12 +593,9 @@ def main():
 
     token = os.environ.get('GITHUB_TOKEN', None)
     if not token:
-        sys.exit(
-            'Github token not set in environment, please set the '
-            'GITHUB_TOKEN environment variable and retry.'
-        )
-
-    gh = Github(auth=Auth.Token(token))
+        gh = Github()
+    else:
+        gh = Github(auth=Auth.Token(token))
     maintainer_file = Maintainers(args.maintainer_file)
 
     if args.pull_request:
